@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "954600030379",
+    "firebase_url": "https://tripget-174518.firebaseio.com",
+    "project_id": "tripget-174518",
+    "storage_bucket": "tripget-174518.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:954600030379:android:3d1565f5efbc27a2",
+        "android_client_info": {
+          "package_name": "com.tripget.tripget"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "954600030379-sp9hr9lv0e24om0s3a086gcri5ehsv7j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tripget.tripget",
+            "certificate_hash": "4bb4b1e129c9b4d395d360b651ab401d5528bda7"
+          }
+        },
+        {
+          "client_id": "954600030379-gjk4j361q2v63fdlk646p3ms2gnntgr1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBP0xuD0U-4wP2mhT9Nm87KUyI0VdhyYrs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "954600030379-gjk4j361q2v63fdlk646p3ms2gnntgr1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
