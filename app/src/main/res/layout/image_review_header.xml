@@ -10,5 +10,6 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="@drawable/ic_add_a_photo"
+        android:backgroundTint="@color/primaryBackground"
         android:layout_centerInParent="true"/>
 </RelativeLayout>

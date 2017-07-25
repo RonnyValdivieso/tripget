@@ -18,8 +18,8 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:theme="@style/TripgetTheme.icons"
                     app:srcCompat="@drawable/ic_flight_takeoff"/>
-
                 <EditText
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -35,8 +35,8 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:theme="@style/TripgetTheme.icons"
                     app:srcCompat="@drawable/ic_local_dining"/>
-
                 <EditText
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -52,8 +52,8 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:theme="@style/TripgetTheme.icons"
                     app:srcCompat="@drawable/ic_local_mall"/>
-
                 <EditText
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -75,8 +75,8 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:theme="@style/TripgetTheme.icons"
                     app:srcCompat="@drawable/ic_local_hotel"/>
-
                 <EditText
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -92,8 +92,8 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:theme="@style/TripgetTheme.icons"
                     app:srcCompat="@drawable/ic_directions_bus_black_24dp"/>
-
                 <EditText
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -109,8 +109,8 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:theme="@style/TripgetTheme.icons"
                     app:srcCompat="@drawable/ic_local_activity"/>
-
                 <EditText
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -118,5 +118,4 @@
                     android:hint="$"/>
             </LinearLayout>
         </LinearLayout>
-
 </LinearLayout>
