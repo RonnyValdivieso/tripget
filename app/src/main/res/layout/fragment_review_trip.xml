@@ -1,0 +1,32 @@
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/reviewTripInside"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:context="com.tripget.tripget.ReviewTripFragment"
+            android:weightSum="1">
+
+            <include layout="@layout/image_review_header"></include>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/space_section"
+                android:paddingLeft="@dimen/space_section"
+                android:paddingRight="@dimen/space_section"
+                android:hint="@string/trip_title" />
+
+            <include layout="@layout/story_review"></include>
+            <include layout="@layout/requirements_review"></include>
+            <include layout="@layout/trip_needs" />
+        </LinearLayout>
+    </ScrollView>
+
+
+
+

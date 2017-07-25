@@ -17,4 +17,11 @@
     <string name="favorites">Favorites</string>
     <string name="my_trips">My trips</string>
     <string name="next_trip">Next trip</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Fragment Search</string>
+    <string name="trip_date">Trip date</string>
+    <string name="destination">Destination</string>
+    <string name="budget_for">Budget for:</string>
+    <string name="trip_title">Trip title</string>
 </resources>
