@@ -1,8 +1,9 @@
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="fill_parent">
         <LinearLayout
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/reviewTripInside"
@@ -11,19 +12,35 @@
             android:orientation="vertical"
             tools:context="com.tripget.tripget.ReviewTripFragment"
             android:weightSum="1">
-
             <include layout="@layout/image_review_header"></include>
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/space_section"
-                android:paddingLeft="@dimen/space_section"
-                android:paddingRight="@dimen/space_section"
-                android:hint="@string/trip_title" />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/space_section"
+    >
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:hint="@string/trip_title" />
+    <include layout="@layout/story_review"></include>
+    <include layout="@layout/requirements_review"></include>
+    <include layout="@layout/trip_needs" />
 
-            <include layout="@layout/story_review"></include>
-            <include layout="@layout/requirements_review"></include>
-            <include layout="@layout/trip_needs" />
+
+</LinearLayout>
+
+            <Button
+                android:id="@+id/save_review"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_centerInParent="true"
+                android:layout_gravity="bottom"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/primaryBackground"
+                android:text="@string/submit"
+                tools:ignore="ObsoleteLayoutParam" />
+
         </LinearLayout>
     </ScrollView>
 

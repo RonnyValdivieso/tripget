@@ -3,6 +3,7 @@ package com.tripget.tripget;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -37,7 +38,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener, ReviewTripFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener, ReviewTripFragment.OnFragmentInteractionListener, ExampleFragment.OnFragmentInteractionListener {
 
     //Visual elements
     private TextView nameTextView;
@@ -54,11 +55,26 @@ public class MainActivity extends AppCompatActivity
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthListener;
 
+    //Fragments
+
+    FragmentTransaction transaction;
+    private Fragment fragment = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        // ----- NO BORRAR, TENGO MIS DUDAS RESPECTO A LA LLAMADA EN BACKSTACK ---- //
+
+        /*transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.main_content, fragment);
+        transaction.addToBackStack(null);
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        transaction.commit();*/
+
 
         //SignIn Google
 
@@ -95,15 +111,8 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                ReviewTripFragment fragment = new ReviewTripFragment();
-                transaction.add(R.id.main_content, fragment);
-                transaction.addToBackStack(null);
-
-                transaction.commit();
-
-
+                fragment = new ReviewTripFragment();
+                callFragment();
             }
         });
 
@@ -113,9 +122,21 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_search);
 
+
+
+    }
+
+    private void callFragment() {
+        transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.main_content, fragment);
+        transaction.addToBackStack(null);
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        transaction.commit();
     }
 
     //Google SignIn Methods
@@ -178,7 +199,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    //Menu Drawe Method
+    //Menu Drawer Method
 
     @Override
     public void onBackPressed() {
@@ -220,6 +241,8 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_search) {
             // Handle the camera action
+            fragment = new ExampleFragment();
+            callFragment();
         } else if (id == R.id.nav_my_trips) {
 
         } else if (id == R.id.nav_favorite) {
