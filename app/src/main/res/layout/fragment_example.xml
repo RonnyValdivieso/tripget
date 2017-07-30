@@ -8,7 +8,7 @@ tools:context="com.tripget.tripget.ExampleFragment">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="This is the real life?"
+        android:text="Is this the real life?"
         android:gravity="center"/>
 
 <android.support.design.widget.FloatingActionButton
