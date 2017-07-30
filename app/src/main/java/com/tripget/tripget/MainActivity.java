@@ -66,6 +66,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        fragment = new ExampleFragment();
+        callFragment();
 
         // ----- NO BORRAR, TENGO MIS DUDAS RESPECTO A LA LLAMADA EN BACKSTACK ---- //
 
@@ -107,36 +109,25 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fragment = new ReviewTripFragment();
-                callFragment();
-            }
-        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_search);
 
-
-
     }
 
     private void callFragment() {
-        transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.main_content, fragment);
-        transaction.addToBackStack(null);
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        transaction.commit();
+
+        if(fragment instanceof  ExampleFragment){
+            getSupportFragmentManager().beginTransaction().replace(R.id.main_content, fragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+        }else {
+            getSupportFragmentManager().beginTransaction().replace(R.id.main_content, fragment).addToBackStack(null).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+        }
+
     }
 
     //Google SignIn Methods
@@ -243,6 +234,11 @@ public class MainActivity extends AppCompatActivity
             // Handle the camera action
             fragment = new ExampleFragment();
             callFragment();
+           /* transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.main_content, fragment);
+            transaction.addToBackStack(null);
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            transaction.commit();*/
         } else if (id == R.id.nav_my_trips) {
 
         } else if (id == R.id.nav_favorite) {

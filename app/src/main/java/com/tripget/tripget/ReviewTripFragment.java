@@ -115,7 +115,7 @@ public class ReviewTripFragment extends Fragment {
         buttonfragment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Your story has been saved", Snackbar.LENGTH_SHORT)
+                Snackbar.make(view, R.string.story_saved, Snackbar.LENGTH_SHORT)
                         .setAction("Action", null).show();
             }
         });
