@@ -1,0 +1,21 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:clipToPadding="false"
+	android:fillViewport="false"
+	app:layout_collapseParallaxMultiplier="1.0">
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical">
+
+		<include layout="@layout/review_header"></include>
+
+		<include layout="@layout/review_body"></include>
+
+	</LinearLayout>
+
+</ScrollView>

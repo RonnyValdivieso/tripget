@@ -38,27 +38,32 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener, ReviewTripFragment.OnFragmentInteractionListener, ExampleFragment.OnFragmentInteractionListener {
+		implements NavigationView.OnNavigationItemSelectedListener,
+			GoogleApiClient.OnConnectionFailedListener,
+			ReviewTripFragment.OnFragmentInteractionListener,
+			ExampleFragment.OnFragmentInteractionListener,
+			MyTripsFragment.OnFragmentInteractionListener,
+			ReviewFragment.OnFragmentInteractionListener {
 
-    //Visual elements
-    private TextView nameTextView;
-    private TextView emailTextView;
-    private ImageView photoImageView;
-    private FloatingActionButton fab;
+	//Visual elements
+	private TextView nameTextView;
+	private TextView emailTextView;
+	private ImageView photoImageView;
+	private FloatingActionButton fab;
 
-    //Google Api Client
+	//Google Api Client
 
-    private GoogleApiClient googleApiClient;
+	private GoogleApiClient googleApiClient;
 
-    //FirebaseAuth and listener
+	//FirebaseAuth and listener
 
-    private FirebaseAuth firebaseAuth;
-    private FirebaseAuth.AuthStateListener firebaseAuthListener;
+	private FirebaseAuth firebaseAuth;
+	private FirebaseAuth.AuthStateListener firebaseAuthListener;
 
-    //Fragments
+	//Fragments
 
-    FragmentTransaction transaction;
-    private Fragment fragment = null;
+	FragmentTransaction transaction;
+	private Fragment fragment = null;
 
 
     @Override
@@ -234,17 +239,14 @@ public class MainActivity extends AppCompatActivity
             // Handle the camera action
             fragment = new ExampleFragment();
             callFragment();
-           /* transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.main_content, fragment);
-            transaction.addToBackStack(null);
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-            transaction.commit();*/
         } else if (id == R.id.nav_my_trips) {
-
+            fragment = new MyTripsFragment();
+            callFragment();
         } else if (id == R.id.nav_favorite) {
 
         } else if (id == R.id.nav_notification) {
-
+            fragment = new ReviewFragment();
+            callFragment();
         } else if (id == R.id.nav_exit) {
             logOut();
         }
