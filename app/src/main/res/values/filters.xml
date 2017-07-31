@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="filters_array">
+        <item>Date</item>
+        <item>Low budget</item>
+        <item>High budget</item>
+        <item>Likes</item>
+    </string-array>
+</resources>
