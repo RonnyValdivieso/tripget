@@ -4,11 +4,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -26,12 +23,9 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,9 +35,10 @@ public class MainActivity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener,
 			GoogleApiClient.OnConnectionFailedListener,
 			ReviewTripFragment.OnFragmentInteractionListener,
-			ExampleFragment.OnFragmentInteractionListener,
+			NextTripFragment.OnFragmentInteractionListener,
 			MyTripsFragment.OnFragmentInteractionListener,
-			ReviewFragment.OnFragmentInteractionListener {
+			ReviewFragment.OnFragmentInteractionListener,
+            NotificationFragment.OnFragmentInteractionListener{
 
 	//Visual elements
 	private TextView nameTextView;
@@ -71,7 +66,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fragment = new ExampleFragment();
+        fragment = new NextTripFragment();
         callFragment();
 
         // ----- NO BORRAR, TENGO MIS DUDAS RESPECTO A LA LLAMADA EN BACKSTACK ---- //
@@ -127,7 +122,7 @@ public class MainActivity extends AppCompatActivity
 
     private void callFragment() {
 
-        if(fragment instanceof  ExampleFragment){
+        if(fragment instanceof NextTripFragment){
             getSupportFragmentManager().beginTransaction().replace(R.id.main_content, fragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
         }else {
             getSupportFragmentManager().beginTransaction().replace(R.id.main_content, fragment).addToBackStack(null).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
@@ -237,7 +232,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_search) {
             // Handle the camera action
-            fragment = new ExampleFragment();
+            fragment = new NextTripFragment();
             callFragment();
         } else if (id == R.id.nav_my_trips) {
             fragment = new MyTripsFragment();
@@ -245,7 +240,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_favorite) {
 
         } else if (id == R.id.nav_notification) {
-            fragment = new ReviewFragment();
+            /*fragment = new ReviewFragment();*/
+            fragment = new NotificationFragment();
             callFragment();
         } else if (id == R.id.nav_exit) {
             logOut();
@@ -254,8 +250,6 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
     @Override
     public void onFragmentInteraction(Uri uri) {
 
