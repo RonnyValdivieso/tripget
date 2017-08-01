@@ -1,16 +1,24 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-		    xmlns:tools="http://schemas.android.com/tools"
-		    android:layout_width="fill_parent"
-		    android:layout_height="fill_parent">
+<?xml version="1.0" encoding="utf-8"?>
 
-	<LinearLayout android:orientation="vertical"
-	              android:layout_width="match_parent"
-		          android:layout_height="wrap_content">
-
-		<include layout="@layout/finder_header"></include>
-		<include layout="@layout/review_list"></include>
-
-	</LinearLayout>
-
-</ScrollView>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:padding="@dimen/space_section"
+              android:orientation="horizontal">
+	<TextView
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:textSize="14dp"
+		android:text="@string/budget_for"/>
+	<Spinner
+		android:id="@+id/trip_type_spinner"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"></Spinner>
+	<Spinner
+		android:id="@+id/trip_duration_spinner"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"></Spinner>
+</LinearLayout>
