@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "954600030379-bl33pdn31lmar1jeu585ok3keptldpoh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tripget.tripget",
+            "certificate_hash": "0b4204e06e4bfbdaa99c1677f359ea5dd86cf944"
+          }
+        },
+        {
           "client_id": "954600030379-tquubtf3giv9k1vnc59lpsh3iu0am64r.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

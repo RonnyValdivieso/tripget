@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity
 			NextTripFragment.OnFragmentInteractionListener,
 			MyTripsFragment.OnFragmentInteractionListener,
 			ReviewFragment.OnFragmentInteractionListener,
-            NotificationFragment.OnFragmentInteractionListener{
+			NotificationFragment.OnFragmentInteractionListener{
 
 	//Visual elements
 	private TextView nameTextView;
@@ -61,74 +61,75 @@ public class MainActivity extends AppCompatActivity
 	private Fragment fragment = null;
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
 
-        fragment = new NextTripFragment();
-        callFragment();
+		fragment = new NextTripFragment();
+		callFragment();
 
-        // ----- NO BORRAR, TENGO MIS DUDAS RESPECTO A LA LLAMADA EN BACKSTACK ---- //
+		// ----- NO BORRAR, TENGO MIS DUDAS RESPECTO A LA LLAMADA EN BACKSTACK ---- //
 
-        /*transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.main_content, fragment);
-        transaction.addToBackStack(null);
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        transaction.commit();*/
+		/*transaction = getSupportFragmentManager().beginTransaction();
+		transaction.replace(R.id.main_content, fragment);
+		transaction.addToBackStack(null);
+		transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		transaction.commit();*/
 
 
-        //SignIn Google
+		//SignIn Google
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
+		GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+				.requestEmail()
+				.build();
 
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+		googleApiClient = new GoogleApiClient.Builder(this)
+				.enableAutoManage(this, this)
+				.addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+				.build();
 
-        //Auth Firebase
+		//Auth Firebase
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null){
-                    setUserData(user);
-                }else{
-                    goLogInScreen();
-                }
-            }
-        };
+		firebaseAuth = FirebaseAuth.getInstance();
+		firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
+			@Override
+			public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+				FirebaseUser user = firebaseAuth.getCurrentUser();
 
-        //Menu Drawer
+				if (user != null){
+					setUserData(user);
+				} else {
+					goLogInScreen();
+				}
+			}
+		};
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+		//Menu Drawer
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setCheckedItem(R.id.nav_search);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
 
-    }
+		DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+		ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+				this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+		drawer.setDrawerListener(toggle);
+		toggle.syncState();
+		NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+		navigationView.setNavigationItemSelectedListener(this);
+		navigationView.setCheckedItem(R.id.nav_search);
 
-    private void callFragment() {
+	}
 
-        if(fragment instanceof NextTripFragment){
-            getSupportFragmentManager().beginTransaction().replace(R.id.main_content, fragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
-        }else {
-            getSupportFragmentManager().beginTransaction().replace(R.id.main_content, fragment).addToBackStack(null).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
-        }
+	private void callFragment() {
 
-    }
+		if(fragment instanceof NextTripFragment) {
+			getSupportFragmentManager().beginTransaction().replace(R.id.main_content, fragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+		} else {
+			getSupportFragmentManager().beginTransaction().replace(R.id.main_content, fragment).addToBackStack(null).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+		}
+
+	}
 
     //Google SignIn Methods
 
@@ -240,7 +241,6 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_favorite) {
 
         } else if (id == R.id.nav_notification) {
-            /*fragment = new ReviewFragment();*/
             fragment = new NotificationFragment();
             callFragment();
         } else if (id == R.id.nav_exit) {
@@ -253,5 +253,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+	// Review Fragment
+    public void goToReview(View view) {
+	    fragment = new ReviewFragment();
+	    callFragment();
     }
 }

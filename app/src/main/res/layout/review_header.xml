@@ -22,8 +22,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="59dp"
             android:layout_marginStart="59dp"
-            android:background="@color/colorAccent"
-            android:src="@drawable/backpacker_white" />
+            android:src="@drawable/random_person" />
 
         <RelativeLayout
             android:id="@+id/ownerInfo"
@@ -45,7 +44,6 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentStart="true"
-                android:layout_alignTop="@+id/userPhotoReview"
                 android:layout_weight="0.10"
                 android:text="Ronny Valdivieso"
                 android:textAlignment="center"
