@@ -238,9 +238,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_my_trips) {
             fragment = new MyTripsFragment();
             callFragment();
-        } else if (id == R.id.nav_new_story) {
-            fragment = new ReviewTripFragment();
-            callFragment();
+        } else if (id == R.id.nav_favorite) {
+
         } else if (id == R.id.nav_notification) {
             fragment = new NotificationFragment();
             callFragment();

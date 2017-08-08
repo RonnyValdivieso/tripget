@@ -1,29 +1,20 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="TripgetTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/lightPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColorSecondaryInverse">@color/primaryBackground</item>
-        <item name="android:textColorSecondary">@color/secondaryText</item>
-
-    </style>
-
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="TripgetTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorSecondary">@color/secondaryText</item>
         <item name="android:textColorSecondaryInverse">@color/primaryBackground</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark"></style>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"></style>
-
-    <style name="AppStyle" parent="Theme.AppCompat.Light.NoActionBar" >
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <style name="TripgetTheme.icons" parent="Theme.AppCompat">
+        <item name="android:tint">@color/colorAccent</item>
     </style>
+
+
 </resources>

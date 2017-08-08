@@ -14,7 +14,7 @@
     <string name="server_client_id">954600030379-gjk4j361q2v63fdlk646p3ms2gnntgr1.apps.googleusercontent.com</string>
     <string name="settings">Settings</string>
     <string name="notifications">Notifications</string>
-    <string name="inspiration">Inspirations</string>
+    <string name="favorites">Favorites</string>
     <string name="my_trips">My trips</string>
     <string name="next_trip">Next trip</string>
 
@@ -28,6 +28,4 @@
     <string name="save">Save</string>
     <string name="submit">Submit</string>
     <string name="story_saved">Your story has been saved</string>
-    <string name="logout">LogOut</string>
-    <string name="write_and_inspire">Write and inspire</string>
 </resources>

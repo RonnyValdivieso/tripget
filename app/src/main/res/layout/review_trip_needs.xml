@@ -19,6 +19,7 @@
 				android:layout_width="0dp"
 				android:layout_height="match_parent"
 				android:layout_weight="1"
+				android:theme="@style/TripgetTheme.icons"
 				app:srcCompat="@drawable/ic_flight_takeoff"/>
 			<TextView
 				android:layout_width="0dp"
@@ -35,6 +36,7 @@
 				android:layout_width="0dp"
 				android:layout_height="match_parent"
 				android:layout_weight="1"
+				android:theme="@style/TripgetTheme.icons"
 				app:srcCompat="@drawable/ic_local_dining"/>
 			<TextView
 				android:layout_width="0dp"
@@ -51,6 +53,7 @@
 				android:layout_width="0dp"
 				android:layout_height="match_parent"
 				android:layout_weight="1"
+				android:theme="@style/TripgetTheme.icons"
 				app:srcCompat="@drawable/ic_local_mall"/>
 			<TextView
 				android:layout_width="0dp"
@@ -73,6 +76,7 @@
 				android:layout_width="0dp"
 				android:layout_height="match_parent"
 				android:layout_weight="1"
+				android:theme="@style/TripgetTheme.icons"
 				app:srcCompat="@drawable/ic_local_hotel"/>
 			<TextView
 				android:layout_width="0dp"
@@ -89,6 +93,7 @@
 				android:layout_width="0dp"
 				android:layout_height="match_parent"
 				android:layout_weight="1"
+				android:theme="@style/TripgetTheme.icons"
 				app:srcCompat="@drawable/ic_directions_bus_black_24dp"/>
 			<TextView
 				android:layout_width="0dp"
@@ -105,6 +110,7 @@
 				android:layout_width="0dp"
 				android:layout_height="match_parent"
 				android:layout_weight="1"
+				android:theme="@style/TripgetTheme.icons"
 				app:srcCompat="@drawable/ic_local_activity"/>
 			<TextView
 				android:layout_width="0dp"
