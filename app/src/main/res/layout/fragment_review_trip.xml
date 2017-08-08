@@ -30,7 +30,7 @@
 
         </LinearLayout>
 
-            <Button
+           <Button
                 android:id="@+id/save_review"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"

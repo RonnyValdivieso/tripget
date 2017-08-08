@@ -28,6 +28,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.Spinner;
@@ -53,7 +54,7 @@ public class ReviewTripFragment extends Fragment {
     Activity activity;
 
     Button buttonfragment;
-    Button buttonphoto;
+    ImageButton buttonphoto;
     Button buttonDatePicker;
     ImageView photo_gallery_pick;
     EditText story_review;
@@ -73,13 +74,15 @@ public class ReviewTripFragment extends Fragment {
         activity = getActivity();
 
         // Inflate the layout for this fragment
+
+
         View view = inflater.inflate(R.layout.fragment_review_trip, container, false);
 
         story_review = (EditText)view.findViewById(R.id.story_review_text);
         buttonfragment = (Button)view.findViewById(R.id.save_review);
         photo_gallery_pick = (ImageView)view.findViewById(R.id.upload_photo_cont);
         buttonDatePicker = (Button)view.findViewById(R.id.button_date_picker);
-        buttonphoto = (Button)view.findViewById(R.id.upload_photo);
+       buttonphoto = (ImageButton) view.findViewById(R.id.upload_photo);
         spinner_trip_type = (Spinner)view.findViewById(R.id.trip_type_spinner);
         spinner_trip_duration = (Spinner)view.findViewById(R.id.trip_duration_spinner);
 
@@ -105,14 +108,13 @@ public class ReviewTripFragment extends Fragment {
         spinner_trip_duration.setAdapter(adapterTripDuration);
 
 
-        buttonphoto.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+       buttonphoto.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 openGallery();
             }
         });
 
-        buttonfragment.setOnClickListener(new View.OnClickListener() {
+       buttonfragment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, R.string.story_saved, Snackbar.LENGTH_SHORT)
@@ -143,7 +145,6 @@ public class ReviewTripFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showDatePicker();
-
             }
         });
 

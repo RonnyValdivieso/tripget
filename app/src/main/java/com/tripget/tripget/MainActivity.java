@@ -235,6 +235,9 @@ public class MainActivity extends AppCompatActivity
             // Handle the camera action
             fragment = new NextTripFragment();
             callFragment();
+        } else if (id == R.id.nav_write) {
+            fragment = new ReviewTripFragment();
+            callFragment();
         } else if (id == R.id.nav_my_trips) {
             fragment = new MyTripsFragment();
             callFragment();
