@@ -34,11 +34,8 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener,
 			GoogleApiClient.OnConnectionFailedListener,
-			ReviewTripFragment.OnFragmentInteractionListener,
-			NextTripFragment.OnFragmentInteractionListener,
-			MyTripsFragment.OnFragmentInteractionListener,
-			ReviewFragment.OnFragmentInteractionListener,
-			NotificationFragment.OnFragmentInteractionListener{
+			TripFormFragment.OnFragmentInteractionListener,
+			BestBudgetFragment.OnFragmentInteractionListener{
 
 	//Visual elements
 	private TextView nameTextView;
@@ -66,7 +63,7 @@ public class MainActivity extends AppCompatActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		fragment = new NextTripFragment();
+		fragment = new BestBudgetFragment();
 		callFragment();
 
 		// ----- NO BORRAR, TENGO MIS DUDAS RESPECTO A LA LLAMADA EN BACKSTACK ---- //
@@ -123,7 +120,7 @@ public class MainActivity extends AppCompatActivity
 
 	private void callFragment() {
 
-		if(fragment instanceof NextTripFragment) {
+		if(fragment instanceof BestBudgetFragment) {
 			getSupportFragmentManager().beginTransaction().replace(R.id.main_content, fragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
 		} else {
 			getSupportFragmentManager().beginTransaction().replace(R.id.main_content, fragment).addToBackStack(null).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
@@ -233,19 +230,14 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_search) {
             // Handle the camera action
-            fragment = new NextTripFragment();
-            callFragment();
-        } else if (id == R.id.nav_write) {
-            fragment = new ReviewTripFragment();
+            fragment = new BestBudgetFragment();
             callFragment();
         } else if (id == R.id.nav_my_trips) {
-            fragment = new MyTripsFragment();
-            callFragment();
-        } else if (id == R.id.nav_favorite) {
+
+        } else if (id == R.id.nav_saved_trips) {
 
         } else if (id == R.id.nav_notification) {
-            fragment = new NotificationFragment();
-            callFragment();
+
         } else if (id == R.id.nav_exit) {
             logOut();
         }
@@ -259,8 +251,8 @@ public class MainActivity extends AppCompatActivity
     }
 
 	// Review Fragment
-    public void goToReview(View view) {
+    /*public void goToReview(View view) {
 	    fragment = new ReviewFragment();
 	    callFragment();
-    }
+    }*/
 }

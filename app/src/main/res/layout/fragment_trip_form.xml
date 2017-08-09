@@ -10,9 +10,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            tools:context="com.tripget.tripget.ReviewTripFragment"
+            tools:context="com.tripget.tripget.TripFormFragment"
             android:weightSum="1">
-            <include layout="@layout/image_review_header"></include>
+            <include layout="@layout/form_image_header"></include>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -24,9 +24,9 @@
                 android:layout_height="match_parent"
                 android:hint="@string/trip_title" />
 
-            <include layout="@layout/story_review"></include>
-            <include layout="@layout/requirements_review"></include>
-            <include layout="@layout/trip_needs" />
+            <include layout="@layout/form_story"></include>
+            <include layout="@layout/form_spinners"></include>
+            <include layout="@layout/form_fields" />
 
         </LinearLayout>
 

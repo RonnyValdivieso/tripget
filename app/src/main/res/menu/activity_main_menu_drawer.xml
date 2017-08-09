@@ -8,17 +8,13 @@
             android:icon="@drawable/ic_search"
             android:title="@string/next_trip" />
         <item
-            android:id="@+id/nav_write"
-            android:icon="@drawable/ic_edit"
-            android:title="@string/write_and_inspire" />
-        <item
             android:id="@+id/nav_my_trips"
             android:icon="@drawable/ic_library_books"
             android:title="@string/my_trips" />
         <item
-            android:id="@+id/nav_favorite"
+            android:id="@+id/nav_saved_trips"
             android:icon="@drawable/ic_collections_bookmark_black_24dp"
-            android:title="@string/favorites" />
+            android:title="@string/saved_trips" />
         <item
             android:id="@+id/nav_notification"
             android:icon="@drawable/ic_favorite"

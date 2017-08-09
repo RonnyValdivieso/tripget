@@ -1,23 +1,15 @@
 package com.tripget.tripget;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
-import android.graphics.Rect;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -30,24 +22,19 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Calendar;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ReviewTripFragment.OnFragmentInteractionListener} interface
+ * {@link TripFormFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  */
-public class ReviewTripFragment extends Fragment {
+public class TripFormFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private static final int PICK_IMAGE = 100;
@@ -61,7 +48,7 @@ public class ReviewTripFragment extends Fragment {
     Spinner spinner_trip_type;
     Spinner spinner_trip_duration;
 
-    public ReviewTripFragment() {
+    public TripFormFragment() {
         // Required empty public constructor
     }
 
@@ -76,7 +63,7 @@ public class ReviewTripFragment extends Fragment {
         // Inflate the layout for this fragment
 
 
-        View view = inflater.inflate(R.layout.fragment_review_trip, container, false);
+        View view = inflater.inflate(R.layout.fragment_trip_form, container, false);
 
         story_review = (EditText)view.findViewById(R.id.story_review_text);
         buttonfragment = (Button)view.findViewById(R.id.save_review);

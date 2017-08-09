@@ -14,7 +14,7 @@
     <string name="revoke">"Revoke"</string>
     <string name="settings">Configuración</string>
     <string name="notifications">Notificaciones</string>
-    <string name="favorites">Favorios</string>
+    <string name="saved_trips">Favorios</string>
     <string name="my_trips">Mis viajes</string>
     <string name="next_trip">Próximo destino</string>
 
