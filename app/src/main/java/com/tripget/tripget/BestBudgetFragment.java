@@ -44,7 +44,7 @@ public class BestBudgetFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private FloatingActionButton fab;
     private RecyclerView recyclerView;
-    private  TripAdapter adapter;
+    private TripAdapter adapter;
     private List<Trip> tripList;
     private ImageView imageViewBack;
     private Spinner spinnerFilter;

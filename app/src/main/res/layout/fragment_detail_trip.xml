@@ -41,7 +41,7 @@
                     android:paddingRight="@dimen/space_section"
                     android:paddingLeft="@dimen/space_section"
                     android:layout_gravity="right|bottom"
-                    android:background="@android:color/transparent"
+                    style="@style/Custom.ImageButton"
                     tools:ignore="ContentDescription,RtlHardcoded" />
             </com.ms.square.android.expandabletextview.ExpandableTextView>
 

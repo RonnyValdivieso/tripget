@@ -57,8 +57,6 @@ public class TripFormFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        //Get mainActivity
-        activity = getActivity();
 
         // Inflate the layout for this fragment
 
@@ -68,7 +66,7 @@ public class TripFormFragment extends Fragment {
         buttonfragment = (Button)view.findViewById(R.id.save_review);
         photo_gallery_pick = (ImageView)view.findViewById(R.id.upload_photo_cont);
         buttonDatePicker = (Button)view.findViewById(R.id.button_date_picker);
-       buttonphoto = (ImageButton) view.findViewById(R.id.upload_photo);
+        buttonphoto = (ImageButton) view.findViewById(R.id.upload_photo);
         spinner_trip_type = (Spinner)view.findViewById(R.id.trip_type_spinner);
         spinner_trip_duration = (Spinner)view.findViewById(R.id.trip_duration_spinner);
 
@@ -83,11 +81,11 @@ public class TripFormFragment extends Fragment {
 
         // Create the adapter and set it to the AutoCompleteTextView
         ArrayAdapter<String> adapterCountries =
-                new ArrayAdapter<String>(activity, android.R.layout.simple_dropdown_item_1line, countries);
+                new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, countries);
         ArrayAdapter<String> adapterTripType =
-                new ArrayAdapter<String>(activity, android.R.layout.simple_dropdown_item_1line, trip_type);
+                new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, trip_type);
         ArrayAdapter<String> adapterTripDuration =
-                new ArrayAdapter<String>(activity, android.R.layout.simple_dropdown_item_1line, trip_duration);
+                new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, trip_duration);
 
         destinationView.setAdapter(adapterCountries);
         spinner_trip_type.setAdapter(adapterTripType);
@@ -169,7 +167,6 @@ public class TripFormFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        activity = getActivity();
         if (requestCode == PICK_IMAGE && resultCode == activity.RESULT_OK && null != data) {
 
             Uri selectedImage = data.getData();
