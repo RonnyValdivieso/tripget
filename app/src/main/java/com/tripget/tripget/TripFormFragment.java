@@ -62,7 +62,6 @@ public class TripFormFragment extends Fragment {
 
         // Inflate the layout for this fragment
 
-
         View view = inflater.inflate(R.layout.fragment_trip_form, container, false);
 
         story_review = (EditText)view.findViewById(R.id.story_review_text);

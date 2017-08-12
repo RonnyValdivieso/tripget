@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/notification_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:background="?android:selectableItemBackground"
+    android:paddingTop="@dimen/space_elements"
+    android:paddingBottom="@dimen/space_elements"
+    android:paddingLeft="@dimen/space_section"
+    android:paddingRight="@dimen/space_section">
+
+
+    <ImageView
+        android:id="@+id/userImgNoti"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription=""
+        app:srcCompat="@drawable/p4"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/userActionNoti"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="USER +  ACTION + TRIP"
+        tools:ignore="HardcodedText"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:id="@+id/tripImgNoti"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/new_york"
+        tools:ignore="ContentDescription" />
+</RelativeLayout>

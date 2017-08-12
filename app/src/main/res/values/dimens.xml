@@ -10,4 +10,5 @@
 
     <dimen name="detail_backdrop_height">150dp</dimen>
     <dimen name="backdrop_title">30dp</dimen>
+    <dimen name="card_album_radius">0dp</dimen>
 </resources>

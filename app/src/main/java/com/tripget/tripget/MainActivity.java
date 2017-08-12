@@ -35,7 +35,9 @@ public class MainActivity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener,
 			GoogleApiClient.OnConnectionFailedListener,
 			TripFormFragment.OnFragmentInteractionListener,
-			BestBudgetFragment.OnFragmentInteractionListener{
+			BestBudgetFragment.OnFragmentInteractionListener,
+            NotificationFragment.OnFragmentInteractionListener,
+            DetailTripFragment.OnFragmentInteractionListener{
 
 	//Visual elements
 	private TextView nameTextView;
@@ -233,10 +235,14 @@ public class MainActivity extends AppCompatActivity
             fragment = new BestBudgetFragment();
             callFragment();
         } else if (id == R.id.nav_my_trips) {
+            fragment = new DetailTripFragment();
+            callFragment();
 
         } else if (id == R.id.nav_saved_trips) {
 
         } else if (id == R.id.nav_notification) {
+            fragment = new NotificationFragment();
+            callFragment();
 
         } else if (id == R.id.nav_exit) {
             logOut();

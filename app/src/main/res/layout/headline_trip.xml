@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    android:id="@+id/headlineBaseTrip"
+xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="wrap_content">
+    <RelativeLayout
+        android:id="@+id/headlineCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/space_elements"
+        android:paddingLeft="@dimen/space_elements"
+        android:paddingRight="@dimen/space_elements"
+        android:paddingTop="@dimen/space_elements"
+        tools:ignore="RtlHardcoded">
+
+        <ImageView
+            android:id="@+id/userImgTrip"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            app:srcCompat="@drawable/random_person"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/usernameTrip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:textColor="@color/primaryText"
+            android:layout_toEndOf="@+id/userImgTrip"
+            android:layout_toRightOf="@+id/userImgTrip"
+            android:text="Juan Sebastian"
+            tools:ignore="HardcodedText" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/bodyCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/headlineCard">
+
+        <ImageView
+            android:id="@+id/tripImgCard"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:scaleType="centerCrop"
+            android:tint="#80000000"
+            app:srcCompat="@drawable/new_york"
+            tools:ignore="ContentDescription" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/totalBudgetTrip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="$2000"
+                android:textAlignment="center"
+                android:textColor="@color/primaryBackground"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/titleTripCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/space_elements"
+                android:text="Far far away, behind the word mountains, far from the countries Vokali"
+                android:textAlignment="center"
+                android:textColor="@color/primaryBackground"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/dateTripCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Oct, 2016"
+                android:textAlignment="center"
+                android:textColor="@color/primaryBackground"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

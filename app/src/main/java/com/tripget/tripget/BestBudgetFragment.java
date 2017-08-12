@@ -2,6 +2,8 @@ package com.tripget.tripget;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,11 +13,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 
 import com.bumptech.glide.Glide;
 
@@ -42,6 +47,7 @@ public class BestBudgetFragment extends Fragment {
     private  TripAdapter adapter;
     private List<Trip> tripList;
     private ImageView imageViewBack;
+    private Spinner spinnerFilter;
 
 
     public BestBudgetFragment() {
@@ -69,6 +75,13 @@ public class BestBudgetFragment extends Fragment {
             }
         });
 
+        spinnerFilter = (Spinner) view.findViewById(R.id.spinner_filter);
+        String[] filter = getResources().getStringArray(R.array.filters_array);
+        ArrayAdapter<String> adapterFilters =
+                new ArrayAdapter<String>(activity, android.R.layout.simple_dropdown_item_1line, filter);
+        spinnerFilter.setAdapter(adapterFilters);
+
+
         imageViewBack = (ImageView)view.findViewById(R.id.backrop);
         recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
 
@@ -77,13 +90,14 @@ public class BestBudgetFragment extends Fragment {
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(activity,2);
         recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
         prepareTrips();
 
         try{
-            Glide.with(activity).load(R.drawable.banner_upload).into(imageViewBack);
+            Glide.with(activity).load(R.drawable.new_york).into(imageViewBack);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -102,25 +116,65 @@ public class BestBudgetFragment extends Fragment {
         int [] userImg = new int[]{
                 R.drawable.p1,
                 R.drawable.p3,
-                R.drawable.p3,
                 R.drawable.p4
         };
 
-        Trip a = new Trip("Pedro Ortiz", "$2000",userImg[0], covers[0],"2k","Galapagos, 12 Oct, 2016" );
+        Trip a = new Trip(1, "Pedro Ortiz", "It was the best trip I have ever had", 2000, 50, 10, userImg[0], covers[1], "Oct, 2016" );
         tripList.add(a);
-        Trip b = new Trip("Francis Bermudez", "$5000",userImg[1], covers[1],"2k","New York , 12 Oct, 2016" );
+        Trip b = new Trip(2, "Francis Bermúdez", "Amazing journey with new friends", 2000, 35, 5, userImg[1], covers[2], "Oct, 2016" );
         tripList.add(b);
-        Trip c = new Trip("Francis Bermudez", "$200",userImg[2], covers[2],"2k","New York, 12 Oct, 2016" );
+        Trip c = new Trip(3, "Valeria Ramos", "New York, pure love", 1500, 500, 335, userImg[2], covers[3], "Oct, 2016" );
         tripList.add(c);
-        Trip d = new Trip("Valeria Ramos", "$2000",userImg[3], covers[3],"2k","Madrid, 12 Oct, 2016" );
-        tripList.add(d);
-        Trip e = new Trip("Valeria Ramos", "$2000",userImg[3], covers[3],"2k","Madrid, 12 Oct, 2016" );
-        tripList.add(e);
-        Trip f = new Trip("Valeria Ramos", "$2000",userImg[3], covers[3],"2k","Madrid, 12 Oct, 2016" );
-        tripList.add(f);
 
         adapter.notifyDataSetChanged();
 
+    }
+
+
+    /**
+     * RecyclerView item decoration - give equal margin around grid item
+     */
+    public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
+
+        private int spanCount;
+        private int spacing;
+        private boolean includeEdge;
+
+        public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
+            this.spanCount = spanCount;
+            this.spacing = spacing;
+            this.includeEdge = includeEdge;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            int position = parent.getChildAdapterPosition(view); // item position
+            int column = position % spanCount; // item column
+
+            if (includeEdge) {
+                outRect.left = spacing - column * spacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
+                outRect.right = (column + 1) * spacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
+
+                if (position < spanCount) { // top edge
+                    outRect.top = spacing;
+                }
+                outRect.bottom = spacing; // item bottom
+            } else {
+                outRect.left = column * spacing / spanCount; // column * ((1f / spanCount) * spacing)
+                outRect.right = spacing - (column + 1) * spacing / spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
+                if (position >= spanCount) {
+                    outRect.top = spacing; // item top
+                }
+            }
+        }
+    }
+
+    /**
+     * Converting dp to pixel
+     */
+    private int dpToPx(int dp) {
+        Resources r = getResources();
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 
     // TODO: Rename method, update argument and hook method into UI event
