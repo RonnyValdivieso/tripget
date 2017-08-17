@@ -1,4 +1,4 @@
-package com.tripget.tripget;
+package com.tripget.tripget.Fragments;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,11 +22,28 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.tripget.tripget.Adapters.TripAdapter;
+import com.tripget.tripget.Conexion.Constantes;
+import com.tripget.tripget.Conexion.VolleySingleton;
+import com.tripget.tripget.Model.Trip;
+import com.tripget.tripget.R;
 
-import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -36,9 +54,12 @@ import java.util.List;
  */
 public class BestBudgetFragment extends Fragment {
 
-
-
     Activity activity ;
+
+
+    private static final String TAG = BestBudgetFragment.class.getSimpleName();
+    private Gson gson = new Gson();
+
 
     //
     private OnFragmentInteractionListener mListener;
@@ -85,16 +106,15 @@ public class BestBudgetFragment extends Fragment {
         imageViewBack = (ImageView)view.findViewById(R.id.backrop);
         recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
 
-        tripList = new ArrayList<>();
-        adapter = new TripAdapter(activity,tripList);
+        /*tripList = new ArrayList<>();*/
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(activity,2);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
-
-        prepareTrips();
+        recyclerView.setHasFixedSize(true);
+        /*recyclerView.setAdapter(adapter);*/
+       /* prepareTrips();*/
 
         try{
             Glide.with(activity).load(R.drawable.new_york).into(imageViewBack);
@@ -102,7 +122,89 @@ public class BestBudgetFragment extends Fragment {
             e.printStackTrace();
         }
 
+        loadAdapter();
         return view;
+
+
+    }
+
+
+    /*Carga el adaptador*/
+
+    public void loadAdapter(){
+
+
+        HashMap <String, String> map = new HashMap<>();
+
+        map.put("destination", "Guayaquil");
+
+
+        JSONObject jobject = new JSONObject(map);
+
+        Log.d(TAG, jobject.toString());
+
+
+        VolleySingleton.getInstance(getContext()).
+                addToRequestQueue(
+                        new JsonObjectRequest(Request.Method.POST,
+                                Constantes.GET_TRIPS_BY_DESTINATION,
+                                jobject,
+                                new Response.Listener<JSONObject>(){
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        procesarRespuesta(response);
+                                    }
+                                },
+                        new Response.ErrorListener(){
+
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d(TAG, "ERROR VOLLEY: " + error.getMessage());
+                            }
+                        }) {
+                            @Override
+                            public Map<String, String> getHeaders() {
+                                Map<String, String> headers = new HashMap<String, String>();
+                                headers.put("Content-Type", "application/json; charset=utf-8");
+                                headers.put("Accept", "application/json");
+                                return headers;
+                            }
+
+                            @Override
+                            public String getBodyContentType() {
+                                return "application/json; charset=utf-8" + getParamsEncoding();
+                            }
+                        }
+                );
+    }
+
+    private void procesarRespuesta(JSONObject response) {
+
+        try {
+
+            String status = response.getString("status");
+            System.out.print(status);
+
+            switch (status){
+                case "1":
+
+                    //JSONArray tripsJson = response.getJSONArray("trips");
+                    JSONArray tripsJson = response.getJSONArray("trips");
+
+                    System.out.print(tripsJson.toString());
+                    //JSONArray tripsJson = (JSONArray) response.getJSONArray("trips");
+                    Trip[] trips  = gson.fromJson(tripsJson.toString(), Trip[].class);
+                    adapter = new TripAdapter(activity, Arrays.asList(trips));
+                    recyclerView.setAdapter(adapter);
+
+                case "2": //FAIL
+                    String message2 =  response.getString("message");
+                    Toast.makeText(activity,message2, Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
     }
 
     private void prepareTrips() {
@@ -119,14 +221,14 @@ public class BestBudgetFragment extends Fragment {
                 R.drawable.p4
         };
 
-        Trip a = new Trip(1, "Pedro Ortiz", "It was the best trip I have ever had", 2000, 50, 10, userImg[0], covers[1], "Oct, 2016" );
+      /*  Trip a = new Trip(1, "Pedro Ortiz", "It was the best trip I have ever had", 2000, 50, 10, userImg[0], covers[1], "Oct, 2016" );
         tripList.add(a);
         Trip b = new Trip(2, "Francis Bermúdez", "Amazing journey with new friends", 2000, 35, 5, userImg[1], covers[2], "Oct, 2016" );
         tripList.add(b);
         Trip c = new Trip(3, "Valeria Ramos", "New York, pure love", 1500, 500, 335, userImg[2], covers[3], "Oct, 2016" );
         tripList.add(c);
 
-        adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();*/
 
     }
 

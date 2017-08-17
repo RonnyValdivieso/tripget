@@ -1,4 +1,4 @@
-package com.tripget.tripget;
+package com.tripget.tripget.Activity;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -31,14 +31,19 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.tripget.tripget.Fragments.BestBudgetFragment;
+import com.tripget.tripget.Fragments.DetailTripFragment;
+import com.tripget.tripget.Fragments.NotificationFragment;
+import com.tripget.tripget.R;
+import com.tripget.tripget.Fragments.TripFormFragment;
 
 public class MainActivity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener,
 			GoogleApiClient.OnConnectionFailedListener,
-			TripFormFragment.OnFragmentInteractionListener,
-			BestBudgetFragment.OnFragmentInteractionListener,
-            NotificationFragment.OnFragmentInteractionListener,
-            DetailTripFragment.OnFragmentInteractionListener{
+        TripFormFragment.OnFragmentInteractionListener,
+        BestBudgetFragment.OnFragmentInteractionListener,
+        NotificationFragment.OnFragmentInteractionListener,
+        DetailTripFragment.OnFragmentInteractionListener {
 
 	//Visual elements
 	private TextView nameTextView;

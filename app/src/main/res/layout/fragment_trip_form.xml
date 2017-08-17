@@ -10,7 +10,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            tools:context="com.tripget.tripget.TripFormFragment"
+            tools:context="com.tripget.tripget.Fragments.TripFormFragment"
             android:weightSum="1">
             <include layout="@layout/form_image_header"></include>
         <LinearLayout

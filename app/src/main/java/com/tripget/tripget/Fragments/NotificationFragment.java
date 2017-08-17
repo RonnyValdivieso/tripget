@@ -1,4 +1,4 @@
-package com.tripget.tripget;
+package com.tripget.tripget.Fragments;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,13 +6,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+
+import com.tripget.tripget.Adapters.NotificationAdapter;
+import com.tripget.tripget.Model.Notification;
+import com.tripget.tripget.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +32,7 @@ public class NotificationFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
-    private  NotificationAdapter adapter;
+    private NotificationAdapter adapter;
     private List<Notification> notificationList;
 
     public NotificationFragment() {

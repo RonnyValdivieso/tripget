@@ -1,4 +1,4 @@
-package com.tripget.tripget;
+package com.tripget.tripget.Fragments;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;

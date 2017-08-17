@@ -1,4 +1,4 @@
-package com.tripget.tripget;
+package com.tripget.tripget.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -10,8 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-
-import org.w3c.dom.Text;
+import com.tripget.tripget.R;
+import com.tripget.tripget.Model.Trip;
 
 import java.util.List;
 /**
@@ -22,7 +22,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.MyViewHolder> 
 
 
     private Context mContext;
-    private List<Trip> tripList;
+    private List<Trip> trips;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView username, total_budget, title, trip_date, votes, saved, likeText, saveText;
@@ -79,9 +79,9 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.MyViewHolder> 
         }
     }
 
-    public TripAdapter(Context mContext, List<Trip> tripList) {
+    public TripAdapter(Context mContext, List<Trip> trips) {
         this.mContext = mContext;
-        this.tripList = tripList;
+        this.trips = trips;
     }
 
     @Override
@@ -96,22 +96,22 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(TripAdapter.MyViewHolder holder, int position) {
 
-        Trip trip = tripList.get(position);
+        Trip trip = trips.get(position);
 
-        holder.username.setText(trip.getUsername());
-        holder.total_budget.setText("$"+Integer.toString(trip.getTotal_budget()));
+        holder.username.setText(trips.get(position).getUsername());
+        holder.total_budget.setText("$ "+Integer.toString(trips.get(position).getBudget()));
         holder.title.setText(trip.getTitle());
-        holder.trip_date.setText(trip.getDate().toString());
+        holder.trip_date.setText(trips.get(position).getTrip_date().toString());
 
-        holder.votes.setText(Integer.toString(trip.getVotes())+ " likes");
-        holder.saved.setText(Integer.toString(trip.getSaved()) + " saved");
+        holder.votes.setText(Integer.toString(trips.get(position).getVotes())+ " likes");
+        //holder.saved.setText(Integer.toString(trip.getSaved()) + " saved");
 
-        Glide.with(mContext).load(trip.getUserImg()).into(holder.user_image);
-        Glide.with(mContext).load(trip.getUserImgUpload()).into(holder.trip_image);
+        Glide.with(mContext).load(trips.get(position).getUser_image()).into(holder.user_image);
+        Glide.with(mContext).load(trips.get(position).getTrip_image()).into(holder.trip_image);
     }
 
     @Override
     public int getItemCount() {
-        return tripList.size();
+        return trips.size();
     }
 }

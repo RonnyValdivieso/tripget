@@ -1,4 +1,4 @@
-package com.tripget.tripget;
+package com.tripget.tripget.Model;
 
 
 import java.net.URL;
@@ -15,16 +15,16 @@ public class Trip {
     private String title;
     private String content;
     private String destination;
-    private Date trip_date;
+    private String trip_date;
     private int food;
     private int accommodation;
     private int trip_transportation;
     private int local_transportation;
     private int entertainment;
     private int shopping;
-    private int total_budget;
-    private URL user_image;
-    private URL trip_image;
+    private int budget;
+    private String user_image;
+    private String trip_image;
     private int votes;
     private int saved;
     private String number_people;
@@ -38,29 +38,18 @@ public class Trip {
     public Trip() {
     }
 
-    public Trip(int id, String username, String title, Date trip_date, int total_budget, URL user_image, URL trip_image, int votes, int saved) {
+    public Trip(int id, String username, String title, String trip_date, int budget, String user_image, String trip_image, int votes) {
         this.id = id;
         this.username = username;
         this.title = title;
         this.trip_date = trip_date;
-        this.total_budget = total_budget;
+        this.budget = budget;
         this.user_image = user_image;
         this.trip_image = trip_image;
         this.votes = votes;
-        this.saved = saved;
     }
 
-    public Trip(String username, String destination, int votes, int userImg, int userImgUpload, String date, int total_budget ) {
-        this.username = username;
-        this.destination = destination;
-        this.votes = votes;
-        this.userImg = userImg;
-        this.userImgUpload = userImgUpload;
-        this.date = date;
-        this.total_budget = total_budget;
-    }
-
-    public Trip(int id, String username, String title, int total_budget, int votes, int saved, int userImg, int userImgUpload, String date) {
+    /*public Trip(int id, String username, String title, int total_budget, int votes, int saved, int userImg, int userImgUpload, String date) {
         this.id = id;
         this.username = username;
         this.title = title;
@@ -70,6 +59,14 @@ public class Trip {
         this.userImg = userImg;
         this.userImgUpload = userImgUpload;
         this.date = date;
+    }*/
+
+    public int getBudget() {
+        return budget;
+    }
+
+    public void setBudget(int budget) {
+        this.budget = budget;
     }
 
     public int getId() {
@@ -112,11 +109,11 @@ public class Trip {
         this.destination = destination;
     }
 
-    public Date getTrip_date() {
+    public String getTrip_date() {
         return trip_date;
     }
 
-    public void setTrip_date(Date trip_date) {
+    public void setTrip_date(String trip_date) {
         this.trip_date = trip_date;
     }
 
@@ -168,27 +165,20 @@ public class Trip {
         this.shopping = shopping;
     }
 
-    public int getTotal_budget() {
-        return total_budget;
-    }
 
-    public void setTotal_budget(int total_budget) {
-        this.total_budget = total_budget;
-    }
-
-    public URL getUser_image() {
+    public String getUser_image() {
         return user_image;
     }
 
-    public void setUser_image(URL user_image) {
+    public void setUser_image(String user_image) {
         this.user_image = user_image;
     }
 
-    public URL getTrip_image() {
+    public String getTrip_image() {
         return trip_image;
     }
 
-    public void setTrip_image(URL trip_image) {
+    public void setTrip_image(String trip_image) {
         this.trip_image = trip_image;
     }
 

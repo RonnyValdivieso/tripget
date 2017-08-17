@@ -1,4 +1,4 @@
-package com.tripget.tripget;
+package com.tripget.tripget.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.tripget.tripget.Model.Notification;
+import com.tripget.tripget.R;
 
 import java.util.List;
 

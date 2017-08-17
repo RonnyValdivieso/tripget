@@ -1,4 +1,4 @@
-package com.tripget.tripget;
+package com.tripget.tripget.Model;
 
 /**
  * Created by ivonne on 09/08/17.

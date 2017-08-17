@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
-    tools:context="com.tripget.tripget.DetailTripFragment"
+    tools:context="com.tripget.tripget.Fragments.DetailTripFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 

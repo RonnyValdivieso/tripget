@@ -1,4 +1,4 @@
-package com.tripget.tripget;
+package com.tripget.tripget.Activity;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -22,6 +22,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.tripget.tripget.Activity.MainActivity;
+import com.tripget.tripget.R;
 
 public class SignInActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 

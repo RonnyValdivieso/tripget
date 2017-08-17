@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.tripget.tripget.BestBudgetFragment">
+    tools:context="com.tripget.tripget.Fragments.BestBudgetFragment">
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
@@ -56,6 +56,10 @@
                         android:hint="$Budget"
                         android:inputType=""
                         tools:ignore="HardcodedText" />
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat= "@drawable/ic_search"/>
                 </LinearLayout>
             </RelativeLayout>
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -70,6 +74,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_edit"
+        app:layout_behavior="com.tripget.tripget.FabButton.FabonScroll"
         android:tint="@color/primaryBackground"/>
 
 </android.support.design.widget.CoordinatorLayout>

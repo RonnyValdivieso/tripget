@@ -1,4 +1,4 @@
-package com.tripget.tripget;
+package com.tripget.tripget.Fragments;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -23,6 +23,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+
+import com.tripget.tripget.R;
 
 import java.io.IOException;
 import java.util.Calendar;
