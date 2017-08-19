@@ -28,4 +28,7 @@
     <string name="submit">Submit</string>
     <string name="story_saved">Your story has been saved</string>
     <string name="write_and_inspire">Write and inspire</string>
+
+
+    <string name="google_key">AIzaSyBP0xuD0U-4wP2mhT9Nm87KUyI0VdhyYrs</string>
 </resources>

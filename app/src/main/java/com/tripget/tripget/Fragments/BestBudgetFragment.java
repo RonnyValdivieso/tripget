@@ -6,20 +6,29 @@ import android.content.res.Resources;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -29,7 +38,17 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.places.AutocompleteFilter;
+import com.google.android.gms.location.places.AutocompletePrediction;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.Places;
 import com.google.gson.Gson;
+import com.tripget.tripget.Adapters.PlaceAutocompleteAdapter;
 import com.tripget.tripget.Adapters.TripAdapter;
 import com.tripget.tripget.Conexion.Constantes;
 import com.tripget.tripget.Conexion.VolleySingleton;
@@ -52,14 +71,13 @@ import java.util.Map;
  * {@link BestBudgetFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  */
-public class BestBudgetFragment extends Fragment {
+public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
     Activity activity ;
 
 
     private static final String TAG = BestBudgetFragment.class.getSimpleName();
     private Gson gson = new Gson();
-
 
     //
     private OnFragmentInteractionListener mListener;
@@ -69,23 +87,73 @@ public class BestBudgetFragment extends Fragment {
     private List<Trip> tripList;
     private ImageView imageViewBack;
     private Spinner spinnerFilter;
+    private ImageButton searchButton;
+    private EditText destination, budget;
+    String destination_get, budget_get;
+    private String placeId;
+
+
+    //GooglePlaces
+    protected GoogleApiClient mGoogleApiClient;
+
+    private PlaceAutocompleteAdapter mAdapter;
+
+    private AutoCompleteTextView mAutocompleteView;
 
 
     public BestBudgetFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+       mGoogleApiClient = new GoogleApiClient.Builder(this.getActivity()).addConnectionCallbacks(this).addApi(Places.GEO_DATA_API).build();
+        /*mGoogleApiClient = new GoogleApiClient.Builder(this.getActivity())
+                .addApi(Places.GEO_DATA_API)
+                .build();*/
+       // mGoogleApiClient.connect();
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
+
+    }
+
+    @Override
+    public void onStop() {
+        //super.onStop();
+        //mGoogleApiClient.disconnect();
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+        super.onStop();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
 
+        Log.d("ERROR", mGoogleApiClient.toString());
+        //Activity
         activity = getActivity();
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_best_budget, container, false);
+
+        //RecyclerView
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(activity,2);
+
+        //Init Elements
+
         fab = (FloatingActionButton)view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,36 +164,61 @@ public class BestBudgetFragment extends Fragment {
             }
         });
 
+        searchButton = (ImageButton) view.findViewById(R.id.search_budget);
         spinnerFilter = (Spinner) view.findViewById(R.id.spinner_filter);
+        //destination= (EditText) view.findViewById(R.id.destination_search);
+        budget = (EditText) view.findViewById(R.id.budget_search);
+        imageViewBack = (ImageView)view.findViewById(R.id.backrop);
+        recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
+
+
+        // Retrieve the AutoCompleteTextView that will display Place suggestions.
+        mAutocompleteView = (AutoCompleteTextView) view.findViewById(R.id.autocomplete_places);
+        mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
+
+
+        //Elements in Action
+
         String[] filter = getResources().getStringArray(R.array.filters_array);
         ArrayAdapter<String> adapterFilters =
                 new ArrayAdapter<String>(activity, android.R.layout.simple_dropdown_item_1line, filter);
         spinnerFilter.setAdapter(adapterFilters);
-
-
-        imageViewBack = (ImageView)view.findViewById(R.id.backrop);
-        recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
-
-        /*tripList = new ArrayList<>();*/
-
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(activity,2);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
-        /*recyclerView.setAdapter(adapter);*/
-       /* prepareTrips();*/
 
+
+        AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
+                .setTypeFilter(AutocompleteFilter.TYPE_FILTER_CITIES)
+                .build();
+
+
+        mAdapter = new PlaceAutocompleteAdapter(getContext(), mGoogleApiClient, null,typeFilter);
+        mAutocompleteView.setAdapter(mAdapter);
+
+
+
+        //Start Searching
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (budget.getText().length()!=0){
+                    loadAdapter();
+                }else {
+                    Toast.makeText(getContext(), "Search by destination, budget or both", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
         try{
-            Glide.with(activity).load(R.drawable.new_york).into(imageViewBack);
+            Glide.with(activity).load(R.drawable.banner_upload).into(imageViewBack);
         }catch (Exception e){
             e.printStackTrace();
         }
 
-        loadAdapter();
         return view;
-
-
     }
 
 
@@ -133,17 +226,16 @@ public class BestBudgetFragment extends Fragment {
 
     public void loadAdapter(){
 
-
         HashMap <String, String> map = new HashMap<>();
 
-        map.put("destination", "Guayaquil");
+        destination_get = placeId.toString();
+
+        map.put("destination", destination_get);
 
 
         JSONObject jobject = new JSONObject(map);
 
         Log.d(TAG, jobject.toString());
-
-
         VolleySingleton.getInstance(getContext()).
                 addToRequestQueue(
                         new JsonObjectRequest(Request.Method.POST,
@@ -152,7 +244,7 @@ public class BestBudgetFragment extends Fragment {
                                 new Response.Listener<JSONObject>(){
                                     @Override
                                     public void onResponse(JSONObject response) {
-                                        procesarRespuesta(response);
+                                        getTripsJsonByDestination(response);
                                     }
                                 },
                         new Response.ErrorListener(){
@@ -169,7 +261,6 @@ public class BestBudgetFragment extends Fragment {
                                 headers.put("Accept", "application/json");
                                 return headers;
                             }
-
                             @Override
                             public String getBodyContentType() {
                                 return "application/json; charset=utf-8" + getParamsEncoding();
@@ -178,21 +269,17 @@ public class BestBudgetFragment extends Fragment {
                 );
     }
 
-    private void procesarRespuesta(JSONObject response) {
+    private void getTripsJsonByDestination(JSONObject response) {
 
         try {
-
             String status = response.getString("status");
             System.out.print(status);
 
             switch (status){
                 case "1":
-
-                    //JSONArray tripsJson = response.getJSONArray("trips");
                     JSONArray tripsJson = response.getJSONArray("trips");
 
                     System.out.print(tripsJson.toString());
-                    //JSONArray tripsJson = (JSONArray) response.getJSONArray("trips");
                     Trip[] trips  = gson.fromJson(tripsJson.toString(), Trip[].class);
                     adapter = new TripAdapter(activity, Arrays.asList(trips));
                     recyclerView.setAdapter(adapter);
@@ -207,31 +294,55 @@ public class BestBudgetFragment extends Fragment {
         }
     }
 
-    private void prepareTrips() {
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
 
-        int [] covers = new int[]{
-                R.drawable.galapagos,
-                R.drawable.newyork2,
-                R.drawable.newyork3,
-                R.drawable.madrid
-        };
-        int [] userImg = new int[]{
-                R.drawable.p1,
-                R.drawable.p3,
-                R.drawable.p4
-        };
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
 
-      /*  Trip a = new Trip(1, "Pedro Ortiz", "It was the best trip I have ever had", 2000, 50, 10, userImg[0], covers[1], "Oct, 2016" );
-        tripList.add(a);
-        Trip b = new Trip(2, "Francis Bermúdez", "Amazing journey with new friends", 2000, 35, 5, userImg[1], covers[2], "Oct, 2016" );
-        tripList.add(b);
-        Trip c = new Trip(3, "Valeria Ramos", "New York, pure love", 1500, 500, 335, userImg[2], covers[3], "Oct, 2016" );
-        tripList.add(c);
-
-        adapter.notifyDataSetChanged();*/
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
 
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
+    }
+    
+    
+    //Style Grid
 
     /**
      * RecyclerView item decoration - give equal margin around grid item
@@ -286,35 +397,79 @@ public class BestBudgetFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
+
+    //Cosas pa Probar
+
+    private AdapterView.OnItemClickListener mAutocompleteClickListener
+            = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            /*
+             Retrieve the place ID of the selected item from the Adapter.
+             The adapter stores each Place suggestion in a AutocompletePrediction from which we
+             read the place ID and title.
+              */
+            final AutocompletePrediction item = mAdapter.getItem(position);
+            placeId = item.getPlaceId();
+            final CharSequence primaryText = item.getPrimaryText(null);
+            Log.i(TAG, "Autocomplete item selected: " + primaryText);
+
+            /*
+             Issue a request to the Places Geo Data API to retrieve a Place object with additional
+             details about the place.
+              */
+            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
+                    .getPlaceById(mGoogleApiClient, placeId);
+            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
+
+            Log.i(TAG, "Called getPlaceById to get Place details for " + placeId);
+        }
+    };
 
     /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     * Callback for results from a Places Geo Data API query that shows the first place result in
+     * the details view on screen.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
+    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
+            = new ResultCallback<PlaceBuffer>() {
+        @Override
+        public void onResult(PlaceBuffer places) {
+            if (!places.getStatus().isSuccess()) {
+                // Request did not complete successfully
+                Log.e(TAG, "Place query did not complete. Error: " + places.getStatus().toString());
+                places.release();
+                return;
+            }
+            // Get the Place object from the buffer.
+            final Place place = places.get(0);
+
+            // Format details of the place for display and show it in a TextView.
+            /*mPlaceDetailsText.setText(formatPlaceDetails(getResources(), place.getName(),
+                    place.getId(), place.getAddress(), place.getPhoneNumber(),
+                    place.getWebsiteUri()));*/
+
+            // Display the third party attributions if set.
+           /* final CharSequence thirdPartyAttribution = places.getAttributions();
+            if (thirdPartyAttribution == null) {
+                mPlaceDetailsAttribution.setVisibility(View.GONE);
+            } else {
+                mPlaceDetailsAttribution.setVisibility(View.VISIBLE);
+                mPlaceDetailsAttribution.setText(Html.fromHtml(thirdPartyAttribution.toString()));
+            }*/
+
+            Log.i(TAG, "Place details received: " + place.getName());
+
+            places.release();
+        }
+    };
+
+    /*private static Spanned formatPlaceDetails(Resources res, CharSequence name, String id,
+                                              CharSequence address, CharSequence phoneNumber, Uri websiteUri) {
+        Log.e(TAG, res.getString(R.string.place_details, name, id, address, phoneNumber,
+                websiteUri));
+        return Html.fromHtml(res.getString(R.string.place_details, name, id, address, phoneNumber,
+                websiteUri));
+
+    }*/
 }

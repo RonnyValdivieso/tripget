@@ -43,20 +43,23 @@
                     android:gravity="center_horizontal"
                     android:orientation="vertical">
 
-                    <EditText
-                        android:id="@+id/destination_search"
+                    <AutoCompleteTextView
+                        android:id="@+id/autocomplete_places"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/destination"
+                        android:textAlignment="center"
                         tools:ignore="TextFields" />
                     <EditText
                         android:id="@+id/budget_search"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="$Budget"
-                        android:inputType=""
+                        android:inputType="number"
+                        android:textAlignment="center"
                         tools:ignore="HardcodedText" />
                     <ImageButton
+                        android:id="@+id/search_budget"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:srcCompat= "@drawable/ic_search"/>
