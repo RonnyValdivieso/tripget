@@ -7,17 +7,31 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorSecondary">@color/secondaryText</item>
         <item name="android:textColorSecondaryInverse">@color/primaryBackground</item>
+
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark"></style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"></style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark">
+
+    </style>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+
+    </style>
     <style name="TripgetTheme.icons" parent="Theme.AppCompat">
         <item name="android:tint">@color/colorAccent</item>
     </style>
 
     <style name="Custom.ImageButton" parent="@android:style/Widget.ImageButton">
         <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+    </style>
+    <style name="TripgetTheme.Search" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColorHint">#c5c5c5</item>
+        <item name="android:textColorPrimary">@color/primaryBackground</item>
+        <item name="colorControlNormal">#fdfdfd</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
+        <item name="colorControlHighlight">@color/colorPrimary</item>
     </style>
 
 </resources>

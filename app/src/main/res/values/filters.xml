@@ -2,8 +2,8 @@
 <resources>
     <string-array name="filters_array">
         <item>Date</item>
-        <item>Low budget</item>
-        <item>High budget</item>
+        <item>Budget: Low to High</item>
+        <item>Budget: High to Low</item>
         <item>Likes</item>
     </string-array>
 </resources>

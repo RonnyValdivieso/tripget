@@ -9,12 +9,16 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -24,6 +28,16 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.places.AutocompleteFilter;
+import com.google.android.gms.location.places.AutocompletePrediction;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.Places;
+import com.tripget.tripget.Adapters.PlaceAutocompleteAdapter;
 import com.tripget.tripget.R;
 
 import java.io.IOException;
@@ -36,7 +50,7 @@ import java.util.Calendar;
  * {@link TripFormFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  */
-public class TripFormFragment extends Fragment {
+public class TripFormFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks{
 
     private OnFragmentInteractionListener mListener;
     private static final int PICK_IMAGE = 100;
@@ -47,14 +61,46 @@ public class TripFormFragment extends Fragment {
     Button buttonDatePicker;
     ImageView photo_gallery_pick;
     EditText story_review;
+    AutoCompleteTextView mautoCompleteTextView;
     Spinner spinner_trip_type;
     Spinner spinner_trip_duration;
+
+    //GooglePlaces
+    private static final String TAG = BestBudgetFragment.class.getSimpleName();
+    protected GoogleApiClient mGoogleApiClient;
+    private PlaceAutocompleteAdapter mAdapter;
+    private AutoCompleteTextView mAutocompleteView;
+    private String placeId;
+
 
     public TripFormFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mGoogleApiClient = new GoogleApiClient.Builder(this.getActivity()).addConnectionCallbacks(this).addApi(Places.GEO_DATA_API).build();
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
+
+    }
+
+    @Override
+    public void onStop() {
+        //super.onStop();
+        //mGoogleApiClient.disconnect();
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+        super.onStop();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -73,8 +119,7 @@ public class TripFormFragment extends Fragment {
         spinner_trip_duration = (Spinner)view.findViewById(R.id.trip_duration_spinner);
 
 
-        // Get a reference to the AutoCompleteTextView in the layout
-        AutoCompleteTextView destinationView = (AutoCompleteTextView)view.findViewById(R.id.autocomplete_country);
+
 
         // Get the string array
         String[] countries = getResources().getStringArray(R.array.countries_array);
@@ -89,7 +134,7 @@ public class TripFormFragment extends Fragment {
         ArrayAdapter<String> adapterTripDuration =
                 new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, trip_duration);
 
-        destinationView.setAdapter(adapterCountries);
+        //destinationView.setAdapter(adapterCountries);
         spinner_trip_type.setAdapter(adapterTripType);
         spinner_trip_duration.setAdapter(adapterTripDuration);
 
@@ -133,6 +178,21 @@ public class TripFormFragment extends Fragment {
                 showDatePicker();
             }
         });
+
+
+        //Google Places
+
+        // Retrieve the AutoCompleteTextView that will display Place suggestions.
+        mautoCompleteTextView = (AutoCompleteTextView) view.findViewById(R.id.autocomplete_new_destination);
+        mautoCompleteTextView.setOnItemClickListener(mAutocompleteClickListener);
+
+        AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
+                .setTypeFilter(AutocompleteFilter.TYPE_FILTER_CITIES)
+                .build();
+
+
+        mAdapter = new PlaceAutocompleteAdapter(getContext(), mGoogleApiClient, null,typeFilter);
+        mautoCompleteTextView.setAdapter(mAdapter);
 
         return view;
     }
@@ -211,6 +271,21 @@ public class TripFormFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -225,4 +300,70 @@ public class TripFormFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    //Google PLaces
+    //Cosas pa Probar
+
+    private AdapterView.OnItemClickListener mAutocompleteClickListener
+            = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            /*
+             Retrieve the place ID of the selected item from the Adapter.
+             The adapter stores each Place suggestion in a AutocompletePrediction from which we
+             read the place ID and title.
+              */
+            final AutocompletePrediction item = mAdapter.getItem(position);
+            placeId = item.getPlaceId();
+            final CharSequence primaryText = item.getPrimaryText(null);
+            Log.i(TAG, "Autocomplete item selected: " + primaryText);
+
+            /*
+             Issue a request to the Places Geo Data API to retrieve a Place object with additional
+             details about the place.
+              */
+            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
+                    .getPlaceById(mGoogleApiClient, placeId);
+            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
+
+            Log.i(TAG, "Called getPlaceById to get Place details for " + placeId);
+        }
+    };
+
+    /**
+     * Callback for results from a Places Geo Data API query that shows the first place result in
+     * the details view on screen.
+     */
+    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
+            = new ResultCallback<PlaceBuffer>() {
+        @Override
+        public void onResult(PlaceBuffer places) {
+            if (!places.getStatus().isSuccess()) {
+                // Request did not complete successfully
+                Log.e(TAG, "Place query did not complete. Error: " + places.getStatus().toString());
+                places.release();
+                return;
+            }
+            // Get the Place object from the buffer.
+            final Place place = places.get(0);
+
+            // Format details of the place for display and show it in a TextView.
+            /*mPlaceDetailsText.setText(formatPlaceDetails(getResources(), place.getName(),
+                    place.getId(), place.getAddress(), place.getPhoneNumber(),
+                    place.getWebsiteUri()));*/
+
+            // Display the third party attributions if set.
+           /* final CharSequence thirdPartyAttribution = places.getAttributions();
+            if (thirdPartyAttribution == null) {
+                mPlaceDetailsAttribution.setVisibility(View.GONE);
+            } else {
+                mPlaceDetailsAttribution.setVisibility(View.VISIBLE);
+                mPlaceDetailsAttribution.setText(Html.fromHtml(thirdPartyAttribution.toString()));
+            }*/
+
+            Log.i(TAG, "Place details received: " + place.getName());
+
+            places.release();
+        }
+    };
 }

@@ -95,9 +95,7 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
 
     //GooglePlaces
     protected GoogleApiClient mGoogleApiClient;
-
     private PlaceAutocompleteAdapter mAdapter;
-
     private AutoCompleteTextView mAutocompleteView;
 
 
@@ -109,11 +107,6 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
        mGoogleApiClient = new GoogleApiClient.Builder(this.getActivity()).addConnectionCallbacks(this).addApi(Places.GEO_DATA_API).build();
-        /*mGoogleApiClient = new GoogleApiClient.Builder(this.getActivity())
-                .addApi(Places.GEO_DATA_API)
-                .build();*/
-       // mGoogleApiClient.connect();
-
     }
 
     @Override
@@ -199,6 +192,7 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
 
 
 
+
         //Start Searching
 
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -213,7 +207,7 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
             }
         });
         try{
-            Glide.with(activity).load(R.drawable.banner_upload).into(imageViewBack);
+            Glide.with(activity).load(R.drawable.new_york).into(imageViewBack);
         }catch (Exception e){
             e.printStackTrace();
         }
