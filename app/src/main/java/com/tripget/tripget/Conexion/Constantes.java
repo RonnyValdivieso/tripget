@@ -18,7 +18,8 @@ public class Constantes {
     public static final String URL = "http://mobulancer.com/tripgetWebService/view";
 
     //GET DATA
-    public static final String GET_TRIPS = URL + "/getTrips";
-    public static final String GET_TRIPS_BY_BUDGET = URL + "/getTripsByBudget";
+    public static final String GET_TRIPS = URL + "/getTrips.php";
+    public static final String GET_TRIPS_BY_BUDGET = URL + "/getTripsByBudget.php";
     public static final String  GET_TRIPS_BY_DESTINATION = URL + "/getTripsByDestination.php";
+    public static final String  INSERT_USER = URL + "/setUser.php";
 }

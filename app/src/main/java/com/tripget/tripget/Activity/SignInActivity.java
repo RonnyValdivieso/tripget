@@ -94,7 +94,6 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
 
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()){
-            //goMainScreen();
             firebaseAuthWithGoogle(result.getSignInAccount());
 
         }else{

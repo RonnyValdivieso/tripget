@@ -12,10 +12,6 @@
             android:icon="@drawable/ic_library_books"
             android:title="@string/my_trips" />
         <item
-            android:id="@+id/nav_saved_trips"
-            android:icon="@drawable/ic_collections_bookmark_black_24dp"
-            android:title="@string/saved_trips" />
-        <item
             android:id="@+id/nav_notification"
             android:icon="@drawable/ic_favorite"
             android:title="@string/notifications" />

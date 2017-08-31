@@ -76,7 +76,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_edit"
-        app:layout_behavior="com.tripget.tripget.FabButton.FabonScroll"
         android:tint="@color/primaryBackground"/>
 
 </android.support.design.widget.CoordinatorLayout>

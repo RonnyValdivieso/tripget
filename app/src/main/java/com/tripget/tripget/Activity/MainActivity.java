@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatDelegate;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,6 +22,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.auth.api.Auth;
@@ -29,13 +34,25 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
+import com.tripget.tripget.Conexion.Constantes;
+import com.tripget.tripget.Conexion.VolleySingleton;
 import com.tripget.tripget.Fragments.BestBudgetFragment;
 import com.tripget.tripget.Fragments.DetailTripFragment;
+import com.tripget.tripget.Fragments.MyTripsFragment;
 import com.tripget.tripget.Fragments.NotificationFragment;
 import com.tripget.tripget.R;
 import com.tripget.tripget.Fragments.TripFormFragment;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener,
@@ -43,13 +60,16 @@ public class MainActivity extends AppCompatActivity
         TripFormFragment.OnFragmentInteractionListener,
         BestBudgetFragment.OnFragmentInteractionListener,
         NotificationFragment.OnFragmentInteractionListener,
-        DetailTripFragment.OnFragmentInteractionListener {
+        DetailTripFragment.OnFragmentInteractionListener,
+        MyTripsFragment.OnFragmentInteractionListener{
 
-	//Visual elements
+    private static final String TAG = "users" ;
+    //Visual elements
 	private TextView nameTextView;
 	private TextView emailTextView;
 	private ImageView photoImageView;
 	private FloatingActionButton fab;
+    private String idTokenFinal;
 
 	//Google Api Client
 
@@ -66,6 +86,8 @@ public class MainActivity extends AppCompatActivity
 	private Fragment fragment = null;
 
 
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -75,14 +97,6 @@ public class MainActivity extends AppCompatActivity
 
 		fragment = new BestBudgetFragment();
 		callFragment();
-
-		// ----- NO BORRAR, TENGO MIS DUDAS RESPECTO A LA LLAMADA EN BACKSTACK ---- //
-
-		/*transaction = getSupportFragmentManager().beginTransaction();
-		transaction.replace(R.id.main_content, fragment);
-		transaction.addToBackStack(null);
-		transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-		transaction.commit();*/
 
 
 		//SignIn Google
@@ -103,9 +117,16 @@ public class MainActivity extends AppCompatActivity
 			@Override
 			public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
 				FirebaseUser user = firebaseAuth.getCurrentUser();
-
-				if (user != null){
-					setUserData(user);
+                if (user != null){
+                    HashMap <String,String> userHash = new LinkedHashMap<>();
+                    userHash.put("account_id", user.getUid());
+                    userHash.put("username", user.getDisplayName());
+                    userHash.put("name", null);
+                    userHash.put("last_name", null);
+                    userHash.put("email", user.getEmail());
+                    userHash.put("photo", String.valueOf(user.getPhotoUrl()));
+                    loadAdapterUsers(userHash);
+                    setUserData(user);
 				} else {
 					goLogInScreen();
 				}
@@ -182,8 +203,10 @@ public class MainActivity extends AppCompatActivity
 
     //Auth Firebase Method
 
+
     private void setUserData(FirebaseUser user) {
 
+        //Screen
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View header=navigationView.getHeaderView(0);
@@ -243,10 +266,8 @@ public class MainActivity extends AppCompatActivity
             fragment = new BestBudgetFragment();
             callFragment();
         } else if (id == R.id.nav_my_trips) {
-            fragment = new DetailTripFragment();
+            fragment = new MyTripsFragment();
             callFragment();
-
-        } else if (id == R.id.nav_saved_trips) {
 
         } else if (id == R.id.nav_notification) {
             fragment = new NotificationFragment();
@@ -264,9 +285,53 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-	// Review Fragment
-    /*public void goToReview(View view) {
-	    fragment = new ReviewFragment();
-	    callFragment();
-    }*/
+    //
+
+    public void loadAdapterUsers(HashMap<String, String> userHash){
+
+        //String user_save = userHash.get("username");
+
+        //Log.d(TAG, user_save);
+
+        JSONObject jobject = new JSONObject(userHash);
+
+        Log.d(TAG, jobject.toString());
+        VolleySingleton.getInstance(MainActivity.this).
+                addToRequestQueue(
+                        new JsonObjectRequest(Request.Method.POST,
+                                Constantes.INSERT_USER,
+                                jobject,
+                                new Response.Listener<JSONObject>(){
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        //getResponseUsers(response);
+                                        Toast.makeText(MainActivity.this,"users add", Toast.LENGTH_SHORT).show();
+                                    }
+                                },
+                                new Response.ErrorListener(){
+
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Log.d(TAG, "ERROR VOLLEY: " + error.getMessage());
+                                    }
+                                }) {
+                            @Override
+                            public Map<String, String> getHeaders() {
+                                Map<String, String> headers = new HashMap<String, String>();
+                                headers.put("Content-Type", "application/json; charset=utf-8");
+                                headers.put("Accept", "application/json");
+                                return headers;
+                            }
+                            @Override
+                            public String getBodyContentType() {
+                                return "application/json; charset=utf-8" + getParamsEncoding();
+                            }
+                        }
+                );
+    }
+
+    private void getResponseUsers(JSONObject response) {
+
+        Toast.makeText(MainActivity.this,"users add", Toast.LENGTH_SHORT).show();
+    }
 }

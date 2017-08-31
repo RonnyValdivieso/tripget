@@ -1,9 +1,6 @@
 package com.tripget.tripget.Model;
 
 
-import java.net.URL;
-import java.util.Date;
-
 /**
  * Created by ivonne on 08/08/17.
  */
@@ -25,7 +22,7 @@ public class Trip {
     private int budget;
     private String user_image;
     private String trip_image;
-    private int votes;
+    private int likes;
     private int saved;
     private String number_people;
     private String trip_duration;
@@ -38,7 +35,7 @@ public class Trip {
     public Trip() {
     }
 
-    public Trip(int id, String username, String title, String trip_date, int budget, String user_image, String trip_image, int votes) {
+    public Trip(int id, String username, String title, String trip_date, int budget, String user_image, String trip_image, int likes) {
         this.id = id;
         this.username = username;
         this.title = title;
@@ -46,20 +43,20 @@ public class Trip {
         this.budget = budget;
         this.user_image = user_image;
         this.trip_image = trip_image;
-        this.votes = votes;
+        this.likes = likes;
     }
-
-    /*public Trip(int id, String username, String title, int total_budget, int votes, int saved, int userImg, int userImgUpload, String date) {
+    public Trip(int id, String title, String destination,String username, String trip_date, int budget, String user_image, String trip_image, int likes) {
         this.id = id;
+        this.destination = destination;
         this.username = username;
         this.title = title;
-        this.total_budget = total_budget;
-        this.votes = votes;
-        this.saved = saved;
-        this.userImg = userImg;
-        this.userImgUpload = userImgUpload;
-        this.date = date;
-    }*/
+        this.trip_date = trip_date;
+        this.budget = budget;
+        this.user_image = user_image;
+        this.trip_image = trip_image;
+        this.likes = likes;
+    }
+
 
     public int getBudget() {
         return budget;
@@ -182,12 +179,12 @@ public class Trip {
         this.trip_image = trip_image;
     }
 
-    public int getVotes() {
-        return votes;
+    public int getLikes() {
+        return likes;
     }
 
-    public void setVotes(int votes) {
-        this.votes = votes;
+    public void setLikes(int likes) {
+        this.likes = likes;
     }
 
     public int getSaved() {

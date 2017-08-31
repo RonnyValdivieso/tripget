@@ -37,6 +37,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -61,6 +62,7 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -90,7 +92,7 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
     private ImageButton searchButton;
     private EditText destination, budget;
     String destination_get, budget_get;
-    private String placeId;
+    private String placeId = " ";
 
 
     //GooglePlaces
@@ -133,7 +135,7 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
                              Bundle savedInstanceState) {
 
 
-        Log.d("ERROR", mGoogleApiClient.toString());
+       // Log.d("ERROR", mGoogleApiClient.toString());
         //Activity
         activity = getActivity();
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -191,19 +193,34 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
         mAutocompleteView.setAdapter(mAdapter);
 
 
-
-
         //Start Searching
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (budget.getText().length()!=0){
-                    loadAdapter();
+                if (placeId.toString() != " " || budget.getText().length()!=0){
+
+                    if (placeId.toString() != " " && budget.getText().length()!=0){
+                        HashMap <String,String> tripHash = new LinkedHashMap<>();
+                        tripHash.put("destination", placeId.toString());
+                        tripHash.put("budget", String.valueOf(budget.getText()));
+                        loadAdapterTrips(tripHash);
+                    } else if (placeId.toString() != " " && budget.getText().length()== 0 ){
+                        HashMap <String, String> destinationHash = new HashMap<>();
+                        destinationHash.put("destination",placeId.toString());
+                        loadAdapterDestination(destinationHash);
+                        placeId = " ";
+                    } else if (placeId.toString() == " " && budget.getText().length()!=0){
+                        placeId = " ";
+                        HashMap <String, String> budgetHash = new HashMap<>();
+                        budgetHash.put("budget", String.valueOf(budget.getText()));
+                        loadAdapterBudget(budgetHash);
+                        //Toast.makeText(getContext(),"Coming soon by budget", Toast.LENGTH_SHORT).show();
+                    }
                 }else {
+                    placeId = " ";
                     Toast.makeText(getContext(), "Search by destination, budget or both", Toast.LENGTH_LONG).show();
                 }
-
             }
         });
         try{
@@ -216,18 +233,57 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
     }
 
 
-    /*Carga el adaptador*/
+    /**Adapter**/
 
-    public void loadAdapter(){
+    //ByDestination &ByBudget
 
-        HashMap <String, String> map = new HashMap<>();
+    public void loadAdapterTrips(HashMap<String, String> tripHash){
 
-        destination_get = placeId.toString();
+        destination_get = tripHash.get("destination");
+        JSONObject jobjecthis = new JSONObject(tripHash);
 
-        map.put("destination", destination_get);
+        Log.d(TAG, jobjecthis.toString());
+        VolleySingleton.getInstance(getContext()).
+                addToRequestQueue(
+                        new JsonObjectRequest(Request.Method.POST,
+                                Constantes.GET_TRIPS,
+                                jobjecthis,
+                                new Response.Listener<JSONObject>(){
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        getTripsJson(response);
+                                    }
+                                },
+                                new Response.ErrorListener(){
 
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Log.d(TAG, "ERROR VOLLEY: " + error.getMessage());
+                                    }
+                                }) {
+                            @Override
+                            public Map<String, String> getHeaders() {
+                                Map<String, String> headers = new HashMap<String, String>();
+                                headers.put("Content-Type", "application/json; charset=utf-8");
+                                headers.put("Accept", "application/json");
+                                return headers;
+                            }
+                            @Override
+                            public String getBodyContentType() {
+                                return "application/json; charset=utf-8" + getParamsEncoding();
+                            }
+                        }
+                );
 
-        JSONObject jobject = new JSONObject(map);
+    }
+    //ByDestination
+
+    public void loadAdapterDestination(HashMap<String, String> destinationHash){
+
+        destination_get = destinationHash.get("destination");
+        Log.d(TAG, destination_get);
+
+        JSONObject jobject = new JSONObject(destinationHash);
 
         Log.d(TAG, jobject.toString());
         VolleySingleton.getInstance(getContext()).
@@ -238,7 +294,7 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
                                 new Response.Listener<JSONObject>(){
                                     @Override
                                     public void onResponse(JSONObject response) {
-                                        getTripsJsonByDestination(response);
+                                        getTripsJson(response);
                                     }
                                 },
                         new Response.ErrorListener(){
@@ -263,7 +319,48 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
                 );
     }
 
-    private void getTripsJsonByDestination(JSONObject response) {
+    //ByBudget
+    public void loadAdapterBudget(HashMap<String, String> budgetHash){
+
+        JSONObject jobject = new JSONObject(budgetHash);
+
+        Log.d(TAG, jobject.toString());
+        VolleySingleton.getInstance(getContext()).
+                addToRequestQueue(
+                        new JsonObjectRequest(Request.Method.POST,
+                                Constantes.GET_TRIPS_BY_BUDGET,
+                                jobject,
+                                new Response.Listener<JSONObject>(){
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        getTripsJson(response);
+                                    }
+                                },
+                                new Response.ErrorListener(){
+
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Log.d(TAG, "ERROR VOLLEY: " + error.getMessage());
+                                    }
+                                }) {
+                            @Override
+                            public Map<String, String> getHeaders() {
+                                Map<String, String> headers = new HashMap<String, String>();
+                                headers.put("Content-Type", "application/json; charset=utf-8");
+                                headers.put("Accept", "application/json");
+                                return headers;
+                            }
+                            @Override
+                            public String getBodyContentType() {
+                                return "application/json; charset=utf-8" + getParamsEncoding();
+                            }
+                        }
+                );
+    }
+
+    /**JsonObject to JsonArray**/
+
+    private void getTripsJson(JSONObject response) {
 
         try {
             String status = response.getString("status");
@@ -272,11 +369,11 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
             switch (status){
                 case "1":
                     JSONArray tripsJson = response.getJSONArray("trips");
-
                     System.out.print(tripsJson.toString());
                     Trip[] trips  = gson.fromJson(tripsJson.toString(), Trip[].class);
                     adapter = new TripAdapter(activity, Arrays.asList(trips));
                     recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
 
                 case "2": //FAIL
                     String message2 =  response.getString("message");
@@ -392,8 +489,7 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
     }
 
 
-
-    //Cosas pa Probar
+    //Google Places Implementation
 
     private AdapterView.OnItemClickListener mAutocompleteClickListener
             = new AdapterView.OnItemClickListener() {
@@ -458,12 +554,4 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
         }
     };
 
-    /*private static Spanned formatPlaceDetails(Resources res, CharSequence name, String id,
-                                              CharSequence address, CharSequence phoneNumber, Uri websiteUri) {
-        Log.e(TAG, res.getString(R.string.place_details, name, id, address, phoneNumber,
-                websiteUri));
-        return Html.fromHtml(res.getString(R.string.place_details, name, id, address, phoneNumber,
-                websiteUri));
-
-    }*/
 }
