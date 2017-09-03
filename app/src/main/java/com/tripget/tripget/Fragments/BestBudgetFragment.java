@@ -239,7 +239,7 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
 
     public void loadAdapterTrips(HashMap<String, String> tripHash){
 
-        destination_get = tripHash.get("destination");
+        //destination_get = tripHash.get("destination");
         JSONObject jobjecthis = new JSONObject(tripHash);
 
         Log.d(TAG, jobjecthis.toString());

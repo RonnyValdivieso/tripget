@@ -1,6 +1,8 @@
 package com.tripget.tripget.Activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -39,17 +41,23 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
+import com.tripget.tripget.Adapters.TripAdapter;
 import com.tripget.tripget.Conexion.Constantes;
+import com.tripget.tripget.Conexion.GlobalVariable;
 import com.tripget.tripget.Conexion.VolleySingleton;
 import com.tripget.tripget.Fragments.BestBudgetFragment;
 import com.tripget.tripget.Fragments.DetailTripFragment;
 import com.tripget.tripget.Fragments.MyTripsFragment;
 import com.tripget.tripget.Fragments.NotificationFragment;
+import com.tripget.tripget.Model.Trip;
 import com.tripget.tripget.R;
 import com.tripget.tripget.Fragments.TripFormFragment;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -85,10 +93,14 @@ public class MainActivity extends AppCompatActivity
 	FragmentTransaction transaction;
 	private Fragment fragment = null;
 
+    //Global
+    //GlobalVariable mApp = (GlobalVariable)getApplication();
+
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    SharedPreferences sharedpreferences;
 
 
-
-	@Override
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -116,10 +128,11 @@ public class MainActivity extends AppCompatActivity
 		firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
 			@Override
 			public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-				FirebaseUser user = firebaseAuth.getCurrentUser();
+				final FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null){
+                    idTokenFinal = user.getUid();
                     HashMap <String,String> userHash = new LinkedHashMap<>();
-                    userHash.put("account_id", user.getUid());
+                    userHash.put("account_id", idTokenFinal );
                     userHash.put("username", user.getDisplayName());
                     userHash.put("name", null);
                     userHash.put("last_name", null);
@@ -289,9 +302,6 @@ public class MainActivity extends AppCompatActivity
 
     public void loadAdapterUsers(HashMap<String, String> userHash){
 
-        //String user_save = userHash.get("username");
-
-        //Log.d(TAG, user_save);
 
         JSONObject jobject = new JSONObject(userHash);
 
@@ -304,12 +314,51 @@ public class MainActivity extends AppCompatActivity
                                 new Response.Listener<JSONObject>(){
                                     @Override
                                     public void onResponse(JSONObject response) {
-                                        //getResponseUsers(response);
-                                        Toast.makeText(MainActivity.this,"users add", Toast.LENGTH_SHORT).show();
+                                        getResponseUsers(response);
                                     }
                                 },
                                 new Response.ErrorListener(){
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Log.d(TAG, "ERROR VOLLEY: " + error.getMessage());
+                                        //Toast.makeText(MainActivity.this,"The user may already exists", Toast.LENGTH_SHORT).show();
+                                        HashMap <String,String> userAuthHash = new LinkedHashMap<>();
+                                        userAuthHash.put("account_id", idTokenFinal);
+                                        loadAdapterAuthUser(userAuthHash);
+                                    }
+                                }) {
+                            @Override
+                            public Map<String, String> getHeaders() {
+                                Map<String, String> headers = new HashMap<String, String>();
+                                headers.put("Content-Type", "application/json; charset=utf-8");
+                                headers.put("Accept", "application/json");
+                                return headers;
+                            }
+                            @Override
+                            public String getBodyContentType() {
+                                return "application/json; charset=utf-8" + getParamsEncoding();
+                            }
+                        }
+                );
+    }
 
+    private void loadAdapterAuthUser(HashMap<String, String> userAuthHash) {
+
+        JSONObject jobject = new JSONObject(userAuthHash);
+
+        Log.d(TAG, jobject.toString());
+        VolleySingleton.getInstance(MainActivity.this).
+                addToRequestQueue(
+                        new JsonObjectRequest(Request.Method.POST,
+                                Constantes.GET_ID_BY_TOKEN,
+                                jobject,
+                                new Response.Listener<JSONObject>(){
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        getResponseUserIdByToken(response);
+                                    }
+                                },
+                                new Response.ErrorListener(){
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
                                         Log.d(TAG, "ERROR VOLLEY: " + error.getMessage());
@@ -328,10 +377,55 @@ public class MainActivity extends AppCompatActivity
                             }
                         }
                 );
+
+    }
+
+    private void getResponseUserIdByToken(JSONObject response) {
+
+        try {
+            String status = response.getString("status");
+            System.out.print(status);
+
+            switch (status){
+                case "1":
+                    JSONArray usersJson = response.getJSONArray("trips");
+                    JSONObject userNow = usersJson.getJSONObject(0);
+                    String id = userNow.getString("id");
+                    sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                    editor.putString("id", id);
+                    editor.commit();
+                    //String channel = (sharedpreferences.getString("id", ""));
+                    //Toast.makeText(MainActivity.this, channel, Toast.LENGTH_SHORT).show();
+                case "2": //FAIL
+                    String message2 =  response.getString("message");
+                    Toast.makeText(MainActivity.this,message2, Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
     }
 
     private void getResponseUsers(JSONObject response) {
 
-        Toast.makeText(MainActivity.this,"users add", Toast.LENGTH_SHORT).show();
+        try {
+            String status = response.getString("status");
+
+            switch (status){
+                case "1":
+                    idTokenFinal = "";
+                    Toast.makeText(MainActivity.this,"Welcome to Tripget", Toast.LENGTH_SHORT).show();
+                    break;
+                case "2":
+                    idTokenFinal = "";
+                    Toast.makeText(MainActivity.this,"An error has occur, try again", Toast.LENGTH_SHORT).show();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
     }
 }

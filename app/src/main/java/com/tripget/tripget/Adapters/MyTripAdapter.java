@@ -39,7 +39,7 @@ public class MyTripAdapter extends RecyclerView.Adapter<MyTripAdapter.MyViewHold
             likes = (TextView) view.findViewById(R.id.counterLikesTrip);
 
 
-            user_image = (ImageView) view.findViewById(R.id.userImgTrip);
+            //user_image = (ImageView) view.findViewById(R.id.userImgTrip);
             trip_image = (ImageView) view.findViewById(R.id.tripImgCard);
 
             editBtn = (ImageButton) view.findViewById(R.id.editActionTrip);
@@ -71,7 +71,6 @@ public class MyTripAdapter extends RecyclerView.Adapter<MyTripAdapter.MyViewHold
         holder.titleTrip.setText(trip.getTitle());
         holder.trip_date.setText(trips.get(position).getTrip_date().toString());
         holder.likes.setText(Integer.toString(trips.get(position).getLikes())+ " likes");
-        Glide.with(mContext).load(trips.get(position).getUser_image()).into(holder.user_image);
         Glide.with(mContext).load(trips.get(position).getTrip_image()).into(holder.trip_image);
     }
 

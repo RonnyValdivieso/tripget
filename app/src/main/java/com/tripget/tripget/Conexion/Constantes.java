@@ -21,5 +21,7 @@ public class Constantes {
     public static final String GET_TRIPS = URL + "/getTrips.php";
     public static final String GET_TRIPS_BY_BUDGET = URL + "/getTripsByBudget.php";
     public static final String  GET_TRIPS_BY_DESTINATION = URL + "/getTripsByDestination.php";
+    public static final String  GET_TRIPS_BY_USER = URL + "/getTripById.php";
+    public static final String GET_ID_BY_TOKEN = URL + "/getIdByToken.php";
     public static final String  INSERT_USER = URL + "/setUser.php";
 }

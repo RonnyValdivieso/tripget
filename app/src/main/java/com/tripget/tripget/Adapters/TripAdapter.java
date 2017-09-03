@@ -10,8 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.tripget.tripget.R;
 import com.tripget.tripget.Model.Trip;
+import com.tripget.tripget.common.logger.Log;
 
 import java.util.List;
 /**
@@ -31,7 +33,6 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.MyViewHolder> 
 
         public MyViewHolder(View view) {
             super(view);
-
             username = (TextView) view.findViewById(R.id.usernameTrip);
             total_budget = (TextView) view.findViewById(R.id.totalBudgetTrip);
             title = (TextView) view.findViewById(R.id.titleTripCard);
@@ -78,10 +79,11 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.MyViewHolder> 
         holder.username.setText(trips.get(position).getUsername());
         holder.total_budget.setText("$ "+Integer.toString(trips.get(position).getBudget()));
         holder.title.setText(trip.getTitle());
-        holder.trip_date.setText(trips.get(position).getTrip_date().toString());
-        holder.likes.setText(Integer.toString(trips.get(position).getLikes())+ " likes");
-        Glide.with(mContext).load(trips.get(position).getUser_image()).into(holder.user_image);
-        Glide.with(mContext).load(trips.get(position).getTrip_image()).into(holder.trip_image);
+        holder.trip_date.setText(trip.getTrip_date().toString());
+        holder.likes.setText(Integer.toString(trip.getLikes())+ " likes");
+        Glide.with(mContext).load(trip.getPhoto()).apply(RequestOptions.circleCropTransform()).into(holder.user_image);
+
+        Glide.with(mContext).load(trip.getTrip_image()).into(holder.trip_image);
     }
 
     @Override

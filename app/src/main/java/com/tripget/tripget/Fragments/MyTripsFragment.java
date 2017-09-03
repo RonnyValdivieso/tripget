@@ -2,6 +2,7 @@ package com.tripget.tripget.Fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -13,14 +14,35 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.gson.Gson;
+import com.tripget.tripget.Adapters.MyTripAdapter;
+import com.tripget.tripget.Adapters.TripAdapter;
+import com.tripget.tripget.Conexion.Constantes;
+import com.tripget.tripget.Conexion.VolleySingleton;
+import com.tripget.tripget.Model.Trip;
 import com.tripget.tripget.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 /**
@@ -32,10 +54,16 @@ import com.tripget.tripget.R;
 public class MyTripsFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
+    private static final String TAG = MyTripsFragment.class.getSimpleName();
+    private Gson gson = new Gson();
+    private MyTripAdapter adapter;
+
     private FloatingActionButton fab;
     private RecyclerView recyclerView;
 
     Activity activity ;
+
+    SharedPreferences sharedpreferences;
 
 
     public MyTripsFragment() {
@@ -76,7 +104,81 @@ public class MyTripsFragment extends Fragment {
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
+
+        /*String channel = (sharedpreferences.getString("id", ""));*/
+        HashMap<String,String> userTripHash = new LinkedHashMap<>();
+        userTripHash.put("id", "13");
+        loadAdapterUserTrips(userTripHash);
+
+
+        //
+
+
         return view;
+    }
+
+    private void loadAdapterUserTrips(HashMap<String, String> userTripHash) {
+
+        JSONObject jobject = new JSONObject(userTripHash);
+
+        Log.d(TAG, jobject.toString());
+        VolleySingleton.getInstance(getContext()).
+                addToRequestQueue(
+                        new JsonObjectRequest(Request.Method.POST,
+                                Constantes.GET_TRIPS_BY_USER,
+                                jobject,
+                                new Response.Listener<JSONObject>(){
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        getUserTripsJson(response);
+                                    }
+                                },
+                                new Response.ErrorListener(){
+
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Log.d(TAG, "ERROR VOLLEY: " + error.getMessage());
+                                    }
+                                }) {
+                            @Override
+                            public Map<String, String> getHeaders() {
+                                Map<String, String> headers = new HashMap<String, String>();
+                                headers.put("Content-Type", "application/json; charset=utf-8");
+                                headers.put("Accept", "application/json");
+                                return headers;
+                            }
+                            @Override
+                            public String getBodyContentType() {
+                                return "application/json; charset=utf-8" + getParamsEncoding();
+                            }
+                        }
+                );
+
+    }
+
+    private void getUserTripsJson(JSONObject response) {
+
+        try {
+            String status = response.getString("status");
+            System.out.print(status);
+
+            switch (status){
+                case "1":
+                    JSONArray tripsJson = response.getJSONArray("trips");
+                    System.out.print(tripsJson.toString());
+                    Trip[] trips  = gson.fromJson(tripsJson.toString(), Trip[].class);
+                    adapter = new MyTripAdapter(activity, Arrays.asList(trips));
+                    recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+
+                case "2": //FAIL
+                    String message2 =  response.getString("message");
+                    Toast.makeText(activity,message2, Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
     }
 
     //Style Grid

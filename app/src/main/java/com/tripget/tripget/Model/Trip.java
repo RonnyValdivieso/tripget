@@ -20,7 +20,7 @@ public class Trip {
     private int entertainment;
     private int shopping;
     private int budget;
-    private String user_image;
+    private String photo;
     private String trip_image;
     private int likes;
     private int saved;
@@ -28,35 +28,40 @@ public class Trip {
     private String trip_duration;
 
     //Para ejemplo
-    private int userImg;
-    private int userImgUpload;
     private String date;
 
     public Trip() {
     }
 
-    public Trip(int id, String username, String title, String trip_date, int budget, String user_image, String trip_image, int likes) {
+    public Trip(int id, String username, String title, String trip_date, int budget, String photo, String trip_image, int likes) {
         this.id = id;
         this.username = username;
         this.title = title;
         this.trip_date = trip_date;
         this.budget = budget;
-        this.user_image = user_image;
+        this.photo = photo;
         this.trip_image = trip_image;
         this.likes = likes;
     }
-    public Trip(int id, String title, String destination,String username, String trip_date, int budget, String user_image, String trip_image, int likes) {
+    public Trip(int id, String title, String destination,String username, String trip_date, int budget, String photo, String trip_image, int likes) {
         this.id = id;
         this.destination = destination;
         this.username = username;
         this.title = title;
         this.trip_date = trip_date;
         this.budget = budget;
-        this.user_image = user_image;
+        this.photo = photo;
         this.trip_image = trip_image;
         this.likes = likes;
     }
 
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 
     public int getBudget() {
         return budget;
@@ -162,15 +167,6 @@ public class Trip {
         this.shopping = shopping;
     }
 
-
-    public String getUser_image() {
-        return user_image;
-    }
-
-    public void setUser_image(String user_image) {
-        this.user_image = user_image;
-    }
-
     public String getTrip_image() {
         return trip_image;
     }
@@ -209,22 +205,6 @@ public class Trip {
 
     public void setTrip_duration(String trip_duration) {
         this.trip_duration = trip_duration;
-    }
-
-    public int getUserImg() {
-        return userImg;
-    }
-
-    public void setUserImg(int userImg) {
-        this.userImg = userImg;
-    }
-
-    public int getUserImgUpload() {
-        return userImgUpload;
-    }
-
-    public void setUserImgUpload(int userImgUpload) {
-        this.userImgUpload = userImgUpload;
     }
 
     public String getDate() {

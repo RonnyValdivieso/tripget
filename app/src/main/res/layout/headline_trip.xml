@@ -23,7 +23,6 @@ android:layout_height="wrap_content">
             android:id="@+id/userImgTrip"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            app:srcCompat="@drawable/random_person"
             tools:ignore="ContentDescription" />
 
         <TextView
