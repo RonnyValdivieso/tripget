@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -80,6 +81,7 @@ public class MyTripsFragment extends Fragment {
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
 
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_my_trips, container, false);
 
@@ -98,6 +100,12 @@ public class MyTripsFragment extends Fragment {
             }
         });
 
+        Spinner spinnerFilter = (Spinner) view.findViewById(R.id.spinner_filter);
+        String[] filter = getResources().getStringArray(R.array.filters_array);
+        ArrayAdapter<String> adapterFilters =
+                new ArrayAdapter<String>(activity, android.R.layout.simple_dropdown_item_1line, filter);
+        spinnerFilter.setAdapter(adapterFilters);
+
         recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
         //Elements in Action
         recyclerView.setLayoutManager(mLayoutManager);
@@ -105,15 +113,14 @@ public class MyTripsFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
 
-        /*String channel = (sharedpreferences.getString("id", ""));*/
+        sharedpreferences = this.getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+
+        String channel = (sharedpreferences.getString("id", ""));
         HashMap<String,String> userTripHash = new LinkedHashMap<>();
-        userTripHash.put("id", "13");
+        userTripHash.put("user_id", channel);
         loadAdapterUserTrips(userTripHash);
 
-
         //
-
-
         return view;
     }
 
@@ -125,7 +132,7 @@ public class MyTripsFragment extends Fragment {
         VolleySingleton.getInstance(getContext()).
                 addToRequestQueue(
                         new JsonObjectRequest(Request.Method.POST,
-                                Constantes.GET_TRIPS_BY_USER,
+                                Constantes.GET_TRIPS_BY_USER_ID,
                                 jobject,
                                 new Response.Listener<JSONObject>(){
                                     @Override

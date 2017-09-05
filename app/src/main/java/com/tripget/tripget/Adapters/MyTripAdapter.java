@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.tripget.tripget.Model.Trip;
 import com.tripget.tripget.R;
 
@@ -31,7 +32,6 @@ public class MyTripAdapter extends RecyclerView.Adapter<MyTripAdapter.MyViewHold
         public ImageButton editBtn, deleteBtn;
         public MyViewHolder(View view) {
             super(view);
-
             username = (TextView) view.findViewById(R.id.usernameTrip);
             total_budget = (TextView) view.findViewById(R.id.totalBudgetTrip);
             titleTrip = (TextView) view.findViewById(R.id.titleTripCard);
@@ -39,7 +39,7 @@ public class MyTripAdapter extends RecyclerView.Adapter<MyTripAdapter.MyViewHold
             likes = (TextView) view.findViewById(R.id.counterLikesTrip);
 
 
-            //user_image = (ImageView) view.findViewById(R.id.userImgTrip);
+            user_image = (ImageView) view.findViewById(R.id.userImgTrip);
             trip_image = (ImageView) view.findViewById(R.id.tripImgCard);
 
             editBtn = (ImageButton) view.findViewById(R.id.editActionTrip);
@@ -54,29 +54,31 @@ public class MyTripAdapter extends RecyclerView.Adapter<MyTripAdapter.MyViewHold
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyTripAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.my_trip_cardview, parent,false);
-        return new MyViewHolder(itemView);
+        return new MyTripAdapter.MyViewHolder(itemView);
 
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyTripAdapter.MyViewHolder holder, int position) {
 
         Trip trip = trips.get(position);
-        holder.username.setText(trips.get(position).getUsername());
-        holder.total_budget.setText("$ "+Integer.toString(trips.get(position).getBudget()));
+        holder.username.setText(trip.getUsername());
+        holder.total_budget.setText("$ "+Integer.toString(trip.getBudget()));
         holder.titleTrip.setText(trip.getTitle());
-        holder.trip_date.setText(trips.get(position).getTrip_date().toString());
-        holder.likes.setText(Integer.toString(trips.get(position).getLikes())+ " likes");
-        Glide.with(mContext).load(trips.get(position).getTrip_image()).into(holder.trip_image);
+        holder.trip_date.setText(trip.getTrip_date().toString());
+        holder.likes.setText(Integer.toString(trip.getLikes())+ " likes");
+        Glide.with(mContext).load(trip.getPhoto()).apply(RequestOptions.circleCropTransform()).into(holder.user_image);
+
+        Glide.with(mContext).load(trip.getTrip_image()).into(holder.trip_image);
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return trips.size();
     }
 
 }

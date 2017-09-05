@@ -22,6 +22,7 @@
                 android:layout_height="48dp"
                 app:srcCompat="@drawable/ic_flight_takeoff"/>
             <EditText
+                android:id="@+id/formFieldTransportationTxt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -45,6 +46,7 @@
                 android:layout_height="48dp"
                 app:srcCompat="@drawable/ic_local_hotel"/>
             <EditText
+                android:id="@+id/formFieldAccommodationTxt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -77,6 +79,7 @@
                 android:layout_height="48dp"
                 app:srcCompat="@drawable/ic_local_dining"/>
             <EditText
+                android:id="@+id/formFieldFoodTxt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -100,6 +103,7 @@
                 android:layout_height="48dp"
                 app:srcCompat="@drawable/ic_directions_bus_black_24dp"/>
             <EditText
+                android:id="@+id/formFieldLocalTransportationTxt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -130,6 +134,7 @@
                 android:layout_height="48dp"
                 app:srcCompat="@drawable/ic_local_activity"/>
             <EditText
+                android:id="@+id/formFieldEnterTxt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -153,6 +158,7 @@
                 android:layout_height="48dp"
                 app:srcCompat="@drawable/ic_local_mall"/>
             <EditText
+                android:id="@+id/formFieldShoppingTxt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

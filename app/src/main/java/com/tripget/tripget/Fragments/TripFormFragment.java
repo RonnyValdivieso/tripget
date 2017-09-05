@@ -5,14 +5,17 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringDef;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -27,6 +30,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -37,11 +41,17 @@ import com.google.android.gms.location.places.AutocompletePrediction;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
+import com.tripget.tripget.Activity.MainActivity;
 import com.tripget.tripget.Adapters.PlaceAutocompleteAdapter;
 import com.tripget.tripget.R;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 
 /**
@@ -57,10 +67,11 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
     Activity activity;
 
     Button buttonfragment;
+    Bitmap bitmap;
     ImageButton buttonphoto;
     Button buttonDatePicker;
     ImageView photo_gallery_pick;
-    EditText story_review;
+    EditText story_review, date_choose, titleTrip, food, trip_transportation, local_transportation, accomodation, entertaiment, shopping;
     AutoCompleteTextView mautoCompleteTextView;
     Spinner spinner_trip_type;
     Spinner spinner_trip_duration;
@@ -71,6 +82,7 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
     private PlaceAutocompleteAdapter mAdapter;
     private AutoCompleteTextView mAutocompleteView;
     private String placeId;
+
 
 
     public TripFormFragment() {
@@ -94,8 +106,6 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
 
     @Override
     public void onStop() {
-        //super.onStop();
-        //mGoogleApiClient.disconnect();
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
@@ -110,16 +120,21 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
 
         View view = inflater.inflate(R.layout.fragment_trip_form, container, false);
 
+        titleTrip = (EditText)view.findViewById(R.id.titleTripEdit);
         story_review = (EditText)view.findViewById(R.id.story_review_text);
+        food = (EditText)view.findViewById(R.id.formFieldFoodTxt);
+        trip_transportation = (EditText)view.findViewById(R.id.formFieldTransportationTxt);
+        local_transportation = (EditText)view.findViewById(R.id.formFieldLocalTransportationTxt);
+        entertaiment = (EditText)view.findViewById(R.id.formFieldEnterTxt);
+        shopping = (EditText)view.findViewById(R.id.formFieldShoppingTxt);
+        accomodation = (EditText)view.findViewById(R.id.formFieldAccommodationTxt);
         buttonfragment = (Button)view.findViewById(R.id.save_review);
         photo_gallery_pick = (ImageView)view.findViewById(R.id.upload_photo_cont);
         buttonDatePicker = (Button)view.findViewById(R.id.button_date_picker);
         buttonphoto = (ImageButton) view.findViewById(R.id.upload_photo);
         spinner_trip_type = (Spinner)view.findViewById(R.id.trip_type_spinner);
         spinner_trip_duration = (Spinner)view.findViewById(R.id.trip_duration_spinner);
-
-
-
+        date_choose = (EditText) view.findViewById(R.id.dateTripTxt);
 
         // Get the string array
         String[] countries = getResources().getStringArray(R.array.countries_array);
@@ -148,6 +163,24 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
        buttonfragment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String image = getStringImage(bitmap);
+
+                HashMap<String,String> tripHash = new LinkedHashMap<>();
+                tripHash.put("title", titleTrip.getText().toString());
+                tripHash.put("content", story_review.toString());
+                //tripHash.put("destination",);
+               // tripHash.put("trip_date",);
+               // tripHash.put("trip_image",);
+                tripHash.put("food",String.valueOf(food.getText()));
+                tripHash.put("accommodation", String.valueOf(accomodation.getText()));
+                tripHash.put("trip_transportation", String.valueOf(local_transportation.getText()));
+                tripHash.put("entertaiment", String.valueOf(entertaiment.getText()));
+                tripHash.put("shopping", String.valueOf(shopping.getText()));
+               // tripHash.put("guest_id",);
+                //tripHash.put("trip_duration_id",);
+                //tripHash.put("user_id",);
+
+                loadUploadTrip(tripHash);
                 Snackbar.make(view, R.string.story_saved, Snackbar.LENGTH_SHORT)
                         .setAction("Action", null).show();
             }
@@ -178,10 +211,7 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
                 showDatePicker();
             }
         });
-
-
         //Google Places
-
         // Retrieve the AutoCompleteTextView that will display Place suggestions.
         mautoCompleteTextView = (AutoCompleteTextView) view.findViewById(R.id.autocomplete_new_destination);
         mautoCompleteTextView.setOnItemClickListener(mAutocompleteClickListener);
@@ -195,6 +225,11 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
         mautoCompleteTextView.setAdapter(mAdapter);
 
         return view;
+    }
+
+    private void loadUploadTrip(HashMap<String, String> tripHash) {
+
+
     }
 
     private void showDatePicker() {
@@ -219,9 +254,10 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
 
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
-
-           /* edittext.setText(String.valueOf(dayOfMonth) + "-" + String.valueOf(monthOfYear+1)
-                    + "-" + String.valueOf(year));*/
+           String monthReal =  String.format("%02d", monthOfYear+1);
+            //String.valueOf(monthOfYear+1)
+            String dayReal = String.format("%02d", dayOfMonth);
+            date_choose.setText(String.valueOf(year) + "-" + monthReal + "-" + dayReal);
         }
     };
 
@@ -229,24 +265,61 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGE && resultCode == activity.RESULT_OK && null != data) {
+        /*if (requestCode == PICK_IMAGE && resultCode == activity.RESULT_OK && null != data && data.getData() !=null) {
 
             Uri selectedImage = data.getData();
             try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),selectedImage);
+                //bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),selectedImage);
+
+                InputStream imageStream = getActivity().getContentResolver().openInputStream(selectedImage);
+                bitmap = BitmapFactory.decodeStream(imageStream);
+
                 photo_gallery_pick.setImageBitmap(bitmap);
                 photo_gallery_pick.setScaleType(ImageView.ScaleType.CENTER_CROP);
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }*/
+        if (resultCode == activity.RESULT_OK) {
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
+                bitmap = BitmapFactory.decodeStream(imageStream);
+
+                if (bitmap.getWidth() >=1024 || bitmap.getHeight()>=768){
+                    Bitmap bitmapResized = Bitmap.createScaledBitmap(bitmap,
+                            (int) (bitmap.getWidth() * 0.5), (int) (bitmap.getHeight() * 0.5), false);
+                    photo_gallery_pick.setImageBitmap(bitmapResized);
+                } else{
+                    photo_gallery_pick.setImageBitmap(bitmap);
+                }
+                photo_gallery_pick.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
+            }
+
+        }else {
+            Toast.makeText(getContext(), "You haven't picked Image",Toast.LENGTH_LONG).show();
         }
     }
     private void openGallery() {
 
-        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-        startActivityForResult(gallery, PICK_IMAGE);
-
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, PICK_IMAGE);
+       /* Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(gallery, PICK_IMAGE);*/
     }
+
+    public String getStringImage(Bitmap bmp){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return encodedImage;
+    }
+
 
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

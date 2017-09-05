@@ -93,8 +93,7 @@ public class MainActivity extends AppCompatActivity
 	FragmentTransaction transaction;
 	private Fragment fragment = null;
 
-    //Global
-    //GlobalVariable mApp = (GlobalVariable)getApplication();
+    //SharedPreferences
 
     public static final String MyPREFERENCES = "MyPrefs" ;
     SharedPreferences sharedpreferences;
@@ -321,7 +320,6 @@ public class MainActivity extends AppCompatActivity
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
                                         Log.d(TAG, "ERROR VOLLEY: " + error.getMessage());
-                                        //Toast.makeText(MainActivity.this,"The user may already exists", Toast.LENGTH_SHORT).show();
                                         HashMap <String,String> userAuthHash = new LinkedHashMap<>();
                                         userAuthHash.put("account_id", idTokenFinal);
                                         loadAdapterAuthUser(userAuthHash);
@@ -395,8 +393,6 @@ public class MainActivity extends AppCompatActivity
                     SharedPreferences.Editor editor = sharedpreferences.edit();
                     editor.putString("id", id);
                     editor.commit();
-                    //String channel = (sharedpreferences.getString("id", ""));
-                    //Toast.makeText(MainActivity.this, channel, Toast.LENGTH_SHORT).show();
                 case "2": //FAIL
                     String message2 =  response.getString("message");
                     Toast.makeText(MainActivity.this,message2, Toast.LENGTH_SHORT).show();
@@ -415,8 +411,10 @@ public class MainActivity extends AppCompatActivity
 
             switch (status){
                 case "1":
-                    idTokenFinal = "";
+                    HashMap <String,String> userAuthHash = new LinkedHashMap<>();
+                    userAuthHash.put("account_id", idTokenFinal);
                     Toast.makeText(MainActivity.this,"Welcome to Tripget", Toast.LENGTH_SHORT).show();
+                    idTokenFinal="";
                     break;
                 case "2":
                     idTokenFinal = "";

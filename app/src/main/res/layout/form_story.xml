@@ -13,13 +13,19 @@
             android:id="@+id/autocomplete_new_destination"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.5"
             android:hint="@string/destination"/>
+        <EditText
+            android:id="@+id/dateTripTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:hint="Date"/>
         <Button
             android:id="@+id/button_date_picker"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.2"
             android:hint="@string/trip_date"/>
     </LinearLayout>
     <EditText
