@@ -2,8 +2,10 @@ package com.tripget.tripget.Fragments;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
@@ -32,6 +34,15 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -43,15 +54,26 @@ import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.tripget.tripget.Activity.MainActivity;
 import com.tripget.tripget.Adapters.PlaceAutocompleteAdapter;
+import com.tripget.tripget.Adapters.TripAdapter;
+import com.tripget.tripget.Conexion.Constantes;
+import com.tripget.tripget.Conexion.VolleySingleton;
+import com.tripget.tripget.Model.Trip;
 import com.tripget.tripget.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 /**
@@ -65,6 +87,7 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
     private OnFragmentInteractionListener mListener;
     private static final int PICK_IMAGE = 100;
     Activity activity;
+    View view;
 
     Button buttonfragment;
     Bitmap bitmap;
@@ -75,6 +98,7 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
     AutoCompleteTextView mautoCompleteTextView;
     Spinner spinner_trip_type;
     Spinner spinner_trip_duration;
+    SharedPreferences sharedpreferences;
 
     //GooglePlaces
     private static final String TAG = BestBudgetFragment.class.getSimpleName();
@@ -118,7 +142,7 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
 
         // Inflate the layout for this fragment
 
-        View view = inflater.inflate(R.layout.fragment_trip_form, container, false);
+        view = inflater.inflate(R.layout.fragment_trip_form, container, false);
 
         titleTrip = (EditText)view.findViewById(R.id.titleTripEdit);
         story_review = (EditText)view.findViewById(R.id.story_review_text);
@@ -135,6 +159,9 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
         spinner_trip_type = (Spinner)view.findViewById(R.id.trip_type_spinner);
         spinner_trip_duration = (Spinner)view.findViewById(R.id.trip_duration_spinner);
         date_choose = (EditText) view.findViewById(R.id.dateTripTxt);
+
+        sharedpreferences = this.getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+
 
         // Get the string array
         String[] countries = getResources().getStringArray(R.array.countries_array);
@@ -163,26 +190,10 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
        buttonfragment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String image = getStringImage(bitmap);
 
-                HashMap<String,String> tripHash = new LinkedHashMap<>();
-                tripHash.put("title", titleTrip.getText().toString());
-                tripHash.put("content", story_review.toString());
-                //tripHash.put("destination",);
-               // tripHash.put("trip_date",);
-               // tripHash.put("trip_image",);
-                tripHash.put("food",String.valueOf(food.getText()));
-                tripHash.put("accommodation", String.valueOf(accomodation.getText()));
-                tripHash.put("trip_transportation", String.valueOf(local_transportation.getText()));
-                tripHash.put("entertaiment", String.valueOf(entertaiment.getText()));
-                tripHash.put("shopping", String.valueOf(shopping.getText()));
-               // tripHash.put("guest_id",);
-                //tripHash.put("trip_duration_id",);
-                //tripHash.put("user_id",);
-
-                loadUploadTrip(tripHash);
-                Snackbar.make(view, R.string.story_saved, Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
+                loadUploadTrip();
+                /*Snackbar.make(view, R.string.story_saved, Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null).show();*/
             }
         });
 
@@ -227,9 +238,84 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
         return view;
     }
 
-    private void loadUploadTrip(HashMap<String, String> tripHash) {
+    private void loadUploadTrip() {
 
+        String image = getStringImage(bitmap);
+        String channel = (sharedpreferences.getString("id", ""));
 
+        // String
+        HashMap<String,String> tripHash = new LinkedHashMap<>();
+        tripHash.put("title", titleTrip.getText().toString());
+        tripHash.put("content", story_review.getText().toString());
+        tripHash.put("destination",placeId.toString());
+        tripHash.put("trip_date", date_choose.getText().toString());
+        tripHash.put("trip_image",image);
+        tripHash.put("food",String.valueOf(food.getText()));
+        tripHash.put("accommodation", String.valueOf(accomodation.getText()));
+        tripHash.put("trip_transportation", String.valueOf(trip_transportation.getText()));
+        tripHash.put("local_transportation", String.valueOf(local_transportation.getText()));
+        tripHash.put("entertainment", String.valueOf(entertaiment.getText()));
+        tripHash.put("shopping", String.valueOf(shopping.getText()));
+        tripHash.put("guest_id", "1");
+        tripHash.put("trip_duration_id","2");
+        tripHash.put("user_id", channel);
+
+        JSONObject jobject = new JSONObject(tripHash);
+
+        //Log.d(TAG, jobject.toString());
+        final ProgressDialog loading = ProgressDialog.show(this.getContext(),"Uploading...","Please wait...",false,false);
+
+        VolleySingleton.getInstance(getContext()).
+                addToRequestQueue(
+                        new JsonObjectRequest(Request.Method.POST,
+                                Constantes.INSERT_TRIP,
+                                jobject,
+                                new Response.Listener<JSONObject>(){
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        loading.dismiss();
+                                        saveTripsJson(response);
+                                    }
+                                },
+                                new Response.ErrorListener(){
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        loading.dismiss();
+                                        Log.d(TAG, "ERROR VOLLEY: " + error.getMessage());
+                                    }
+                                }) {
+                            @Override
+                            public Map<String, String> getHeaders() {
+                                Map<String, String> headers = new HashMap<String, String>();
+                                headers.put("Content-Type", "application/json; charset=utf-8");
+                                headers.put("Accept", "application/json");
+                                return headers;
+                            }
+                            @Override
+                            public String getBodyContentType() {
+                                return "application/json; charset=utf-8" + getParamsEncoding();
+                            }
+                        }
+                );}
+
+    private void saveTripsJson(JSONObject response) {
+
+        try {
+            String status = response.getString("status");
+            System.out.print(status);
+
+            switch (status){
+                case "1":
+                    Snackbar.make(view, R.string.story_saved, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+
+                case "2": //FAIL
+                    String message2 =  response.getString("message");
+                    //Toast.makeText(activity,message2, Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
     }
 
     private void showDatePicker() {
@@ -288,8 +374,9 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
 
                 if (bitmap.getWidth() >=1024 || bitmap.getHeight()>=768){
                     Bitmap bitmapResized = Bitmap.createScaledBitmap(bitmap,
-                            (int) (bitmap.getWidth() * 0.5), (int) (bitmap.getHeight() * 0.5), false);
-                    photo_gallery_pick.setImageBitmap(bitmapResized);
+                            (int) (bitmap.getWidth() * 0.3), (int) (bitmap.getHeight() * 0.3), false);
+                    bitmap = bitmapResized;
+                    photo_gallery_pick.setImageBitmap(bitmap);
                 } else{
                     photo_gallery_pick.setImageBitmap(bitmap);
                 }

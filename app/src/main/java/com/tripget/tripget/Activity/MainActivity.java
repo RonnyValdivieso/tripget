@@ -79,6 +79,8 @@ public class MainActivity extends AppCompatActivity
 	private FloatingActionButton fab;
     private String idTokenFinal;
 
+    HashMap <String,String> userHash;
+
 	//Google Api Client
 
 	private GoogleApiClient googleApiClient;
@@ -130,14 +132,15 @@ public class MainActivity extends AppCompatActivity
 				final FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null){
                     idTokenFinal = user.getUid();
-                    HashMap <String,String> userHash = new LinkedHashMap<>();
+                    userHash = new LinkedHashMap<>();
                     userHash.put("account_id", idTokenFinal );
                     userHash.put("username", user.getDisplayName());
                     userHash.put("name", null);
                     userHash.put("last_name", null);
                     userHash.put("email", user.getEmail());
                     userHash.put("photo", String.valueOf(user.getPhotoUrl()));
-                    loadAdapterUsers(userHash);
+                    //loadAdapterUsers(userHash);
+                    loadAdapterAuthUser(userHash);
                     setUserData(user);
 				} else {
 					goLogInScreen();
@@ -320,9 +323,9 @@ public class MainActivity extends AppCompatActivity
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
                                         Log.d(TAG, "ERROR VOLLEY: " + error.getMessage());
-                                        HashMap <String,String> userAuthHash = new LinkedHashMap<>();
+                                        /*HashMap <String,String> userAuthHash = new LinkedHashMap<>();
                                         userAuthHash.put("account_id", idTokenFinal);
-                                        loadAdapterAuthUser(userAuthHash);
+                                        loadAdapterAuthUser(userAuthHash);*/
                                     }
                                 }) {
                             @Override
@@ -342,7 +345,12 @@ public class MainActivity extends AppCompatActivity
 
     private void loadAdapterAuthUser(HashMap<String, String> userAuthHash) {
 
-        JSONObject jobject = new JSONObject(userAuthHash);
+
+        HashMap<String,String> userAuthMap = new LinkedHashMap<>();
+
+        userAuthMap.put("account_id" , userAuthHash.get("account_id"));
+
+        JSONObject jobject = new JSONObject(userAuthMap);
 
         Log.d(TAG, jobject.toString());
         VolleySingleton.getInstance(MainActivity.this).
@@ -395,6 +403,7 @@ public class MainActivity extends AppCompatActivity
                     editor.commit();
                 case "2": //FAIL
                     String message2 =  response.getString("message");
+                    loadAdapterUsers(userHash);
                     Toast.makeText(MainActivity.this,message2, Toast.LENGTH_SHORT).show();
                     break;
             }
@@ -411,8 +420,8 @@ public class MainActivity extends AppCompatActivity
 
             switch (status){
                 case "1":
-                    HashMap <String,String> userAuthHash = new LinkedHashMap<>();
-                    userAuthHash.put("account_id", idTokenFinal);
+                    /*HashMap <String,String> userAuthHash = new LinkedHashMap<>();
+                    userAuthHash.put("account_id", idTokenFinal);*/
                     Toast.makeText(MainActivity.this,"Welcome to Tripget", Toast.LENGTH_SHORT).show();
                     idTokenFinal="";
                     break;

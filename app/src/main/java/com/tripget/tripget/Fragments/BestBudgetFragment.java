@@ -215,7 +215,6 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
                         HashMap <String, String> budgetHash = new HashMap<>();
                         budgetHash.put("budget", String.valueOf(budget.getText()));
                         loadAdapterBudget(budgetHash);
-                        //Toast.makeText(getContext(),"Coming soon by budget", Toast.LENGTH_SHORT).show();
                     }
                 }else {
                     placeId = " ";
