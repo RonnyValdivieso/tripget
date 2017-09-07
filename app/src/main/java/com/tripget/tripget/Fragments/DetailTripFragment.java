@@ -2,6 +2,7 @@ package com.tripget.tripget.Fragments;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.tripget.tripget.Adapters.TripAdapter;
@@ -28,6 +31,7 @@ import com.tripget.tripget.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -48,10 +52,21 @@ public class DetailTripFragment extends Fragment {
     private static final String TAG = DetailTripFragment.class.getSimpleName();
     private Gson gson = new Gson();
 
-
-
     //ID TRIP
     String myInt;
+
+    //GUI ELEMENTS
+
+    private TextView detailFoodTxt, detailTripTransportationTxt, detailLocalTransportationTxt, detailAcommodationTxt, detailShoppingTxt, detailEnterTxt;
+
+    private TextView budgetFor, budgetTotal;
+
+    private TextView username,title,date,context;
+
+    private ImageView userImage, tripImage;
+
+    private ExpandableTextView expTv1;
+
 
     public DetailTripFragment() {
         // Required empty public constructor
@@ -65,8 +80,6 @@ public class DetailTripFragment extends Fragment {
         if (bundle != null) {
             myInt = bundle.getString("id", "");
         }
-
-
     }
 
     @Override
@@ -77,18 +90,30 @@ public class DetailTripFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_detail_trip, container, false);
 
         //ELEMENTS GUI//
-        ExpandableTextView expTv1 = (ExpandableTextView) rootView
-                .findViewById(R.id.expand_text_view);
+
+        userImage = (ImageView)rootView.findViewById(R.id.userImgTrip);
+        username = (TextView)rootView.findViewById(R.id.usernameTrip);
+        title = (TextView)rootView.findViewById(R.id.titleTripCard);
+        tripImage = (ImageView)rootView.findViewById(R.id.tripImgCard);
+        budgetTotal = (TextView)rootView.findViewById(R.id.totalBudgetTrip);
+        budgetFor = (TextView)rootView.findViewById(R.id.guest_duration_txt);
+
+        expTv1 = (ExpandableTextView) rootView.findViewById(R.id.expand_text_view);
+
+
+        detailFoodTxt = (TextView)rootView.findViewById(R.id.detailFieldFoodTxt);
+        detailAcommodationTxt = (TextView)rootView.findViewById(R.id.detailFieldAccommodationTxt);
+        detailTripTransportationTxt = (TextView)rootView.findViewById(R.id.detailFieldTransportationTxt);
+        detailLocalTransportationTxt = (TextView)rootView.findViewById(R.id.detailFieldLocalTransportationTxt);
+        detailEnterTxt = (TextView)rootView.findViewById(R.id.detailFieldEnterTxt);
+        detailShoppingTxt = (TextView)rootView.findViewById(R.id.detailFieldShoppingTxt);
 
         //Toast.makeText(this.getContext(), myInt.toString(),Toast.LENGTH_SHORT).show();
-        expTv1.setText("One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could see his brown belly, slightly domed and divided by arches into stiff sections. The bedding was hardly able to cover it and seemed ready to slide off any moment. His many legs, pitifully thin compared with the size of the rest of him, waved about helplessly as he looked. \"What's happened to me?\" he thought. It wasn't a dream. His room, a proper human room although a little too small, lay peacefully between its four familiar walls. A collection of textile samples lay spread out on the table - Samsa was a travelling salesman - and above it there hung a picture that he had recently cut out of an illustrated magazine and housed in a nice, gilded frame. It showed a lady fitted out with a fur hat and fur boa who sat upright, raising a heavy fur muff that covered the whole of her lower arm towards the viewer. Gregor then turned to look out the window at the dull weather. Drops of rain could be heard hitting the pane, which made him feel quite sad. \"How about if I sleep a little bit longer and forget all this nonsense\", he thought, but that was something he was unable to do because he was used to sleeping on his right, and in his present state couldn't get into that position. However hard he threw himself onto his right, he always rolled back to where he was. He must have tried it a hundred times, shut his eyes so that he wouldn't have to look at the floundering legs, and only stopped when ");
         loadAdapterDetailTrip(myInt);
         return rootView;
     }
 
     private void loadAdapterDetailTrip(String myInt) {
-
-        //destination_get = tripHash.get("destination");
 
         HashMap <String,String> tripHash = new LinkedHashMap<>();
         tripHash.put("id", myInt);
@@ -130,20 +155,76 @@ public class DetailTripFragment extends Fragment {
 
     private void getTripDetailJson(JSONObject response) {
 
+        String arrayGuest[] = getResources().getStringArray(R.array.trip_type);
+        String arrayDuration[] = getResources().getStringArray(R.array.trip_duration);
         try {
             String status = response.getString("status");
             System.out.print(status);
 
             switch (status){
                 case "1":
+
+                    String guest = " ", trip_duration = " ";
+
                     JSONArray usersJson = response.getJSONArray("trips");
                     JSONObject userNow = usersJson.getJSONObject(0);
-                    String id = userNow.getString("title");
-                    Toast.makeText(this.getContext(),id, Toast.LENGTH_SHORT).show();
+
+                    switch (userNow.getString("guest_id")){
+                        case "1":
+                            guest = arrayGuest[0];
+                            break;
+                        case "2":
+                            guest = arrayGuest[1];
+                            break;
+                        case "3":
+                            guest = arrayGuest[2];
+                            break;
+                        case "4":
+                            guest = arrayGuest[3];
+                            break;
+                    }
+
+
+                    switch (userNow.getString("trip_duration_id")){
+                        case "1":
+                            trip_duration = arrayDuration[0];
+                            break;
+                        case "2":
+                            trip_duration = arrayDuration[1];
+                            break;
+                        case "3":
+                            trip_duration = arrayDuration[2];
+                            break;
+                        case "4":
+                            trip_duration = arrayDuration[3];
+                            break;
+                        case "5":
+                            trip_duration = arrayDuration[4];
+
+                    }
+
+
+                    username.setText(userNow.getString("username"));
+                    title.setText(userNow.getString("title"));
+                    expTv1.setText(userNow.getString("content"));
+                    budgetTotal.setText("$ "+ userNow.getString("budget"));
+
+                    Glide.with(this.getContext()).load(userNow.getString("trip_image")).into(tripImage);
+                    Glide.with(this.getContext()).load(userNow.getString("photo")).apply(RequestOptions.circleCropTransform()).into(userImage);
+                    detailFoodTxt.setText(userNow.getString("food"));
+                    detailAcommodationTxt.setText(userNow.getString("accommodation"));
+                    detailTripTransportationTxt.setText(userNow.getString("trip_transportation"));
+                    detailLocalTransportationTxt.setText(userNow.getString("local_transportation"));
+                    detailEnterTxt.setText(userNow.getString("entertainment"));
+                    detailShoppingTxt.setText(userNow.getString("shopping"));
+
+
+                    budgetFor.setText(guest + " / " + trip_duration);
+
+                    break;
 
                 case "2": //FAIL
                     String message2 =  response.getString("message");
-
                     Toast.makeText(this.getContext(),message2, Toast.LENGTH_SHORT).show();
                     break;
             }
@@ -151,6 +232,10 @@ public class DetailTripFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
+    private void loadGuiElements(JSONObject userNow) {
+    }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

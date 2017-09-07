@@ -24,6 +24,7 @@ public class Trip {
     private String trip_image;
     private int likes;
     private int saved;
+    private int liked;
     private String number_people;
     private String trip_duration;
 
@@ -33,7 +34,7 @@ public class Trip {
     public Trip() {
     }
 
-    public Trip(int id, String username, String title, String trip_date, int budget, String photo, String trip_image, int likes) {
+    public Trip(int id, String username, String title, String trip_date, int budget, String photo, String trip_image, int likes, int liked) {
         this.id = id;
         this.username = username;
         this.title = title;
@@ -42,8 +43,9 @@ public class Trip {
         this.photo = photo;
         this.trip_image = trip_image;
         this.likes = likes;
+        this.liked = liked;
     }
-    public Trip(int id, String title, String destination,String username, String trip_date, int budget, String photo, String trip_image, int likes) {
+    public Trip(int id, String title, String destination,String username, String trip_date, int budget, String photo, String trip_image, int likes, int liked) {
         this.id = id;
         this.destination = destination;
         this.username = username;
@@ -53,6 +55,15 @@ public class Trip {
         this.photo = photo;
         this.trip_image = trip_image;
         this.likes = likes;
+        this.liked = liked;
+    }
+
+    public int getLiked() {
+        return liked;
+    }
+
+    public void setLiked(int liked) {
+        this.liked = liked;
     }
 
     public String getPhoto() {

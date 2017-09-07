@@ -2,6 +2,7 @@ package com.tripget.tripget.Fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -94,9 +95,16 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
     private ImageButton searchButton;
     private EditText destination, budget;
     private TextView txtNoTrips;
-    String destination_get, budget_get;
+    private String destination_get, budget_get;
     private String placeId = " ";
+    private String orderBy;
+private boolean ban = false;
 
+
+   private String placeService, budgetService;
+
+
+    SharedPreferences sharedpreferences;
 
     //GooglePlaces
     protected GoogleApiClient mGoogleApiClient;
@@ -197,29 +205,49 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
         mAdapter = new PlaceAutocompleteAdapter(getContext(), mGoogleApiClient, null,typeFilter);
         mAutocompleteView.setAdapter(mAdapter);
 
+        sharedpreferences = this.getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+
+
+
+        spinnerFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                orderBy = String.valueOf(position);
+                if (ban == true){
+                    sendHashMapToService(placeService,budgetService);
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                orderBy = "0";
+            }
+        });
+
 
         //Start Searching
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (placeId.toString() != " " || budget.getText().length()!=0){
 
+
+                if (placeId.toString() != " " || budget.getText().length()!=0){
+                    ban = true;
                     if (placeId.toString() != " " && budget.getText().length()!=0){
-                        HashMap <String,String> tripHash = new LinkedHashMap<>();
-                        tripHash.put("destination", placeId.toString());
-                        tripHash.put("budget", String.valueOf(budget.getText()));
-                        loadAdapterTrips(tripHash);
+                        placeService = placeId.toString();
+                        budgetService = String.valueOf(budget.getText());
+                        sendHashMapToService(placeService, budgetService);
                     } else if (placeId.toString() != " " && budget.getText().length()== 0 ){
-                        HashMap <String, String> destinationHash = new HashMap<>();
-                        destinationHash.put("destination",placeId.toString());
-                        loadAdapterDestination(destinationHash);
+                        budgetService = " ";
+                        placeService = placeId.toString();
                         placeId = " ";
+                        sendHashMapToService(placeService, budgetService);
                     } else if (placeId.toString() == " " && budget.getText().length()!=0){
-                        placeId = " ";
-                        HashMap <String, String> budgetHash = new HashMap<>();
-                        budgetHash.put("budget", String.valueOf(budget.getText()));
-                        loadAdapterBudget(budgetHash);
+                        budgetService = String.valueOf(budget.getText());
+                        placeService = " ";
+                        sendHashMapToService(placeService, budgetService);
                     }
                 }else {
                     placeId = " ";
@@ -235,6 +263,33 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
 
         return view;
     }
+
+    private void sendHashMapToService(String placeService, String budgetService) {
+
+        String channel = (sharedpreferences.getString("id", ""));
+
+        if (placeService != " " && budgetService!= " "){
+            HashMap <String,String> tripHash = new LinkedHashMap<>();
+            tripHash.put("destination", placeService);
+            tripHash.put("budget", budgetService);
+            tripHash.put("order", orderBy);
+            tripHash.put("user_id", channel);
+            loadAdapterTrips(tripHash);
+        } else if (placeService != " " && budgetService == " " ){
+            HashMap <String, String> destinationHash = new HashMap<>();
+            destinationHash.put("destination",placeService);
+            destinationHash.put("order", orderBy);
+            destinationHash.put("user_id",channel);
+            loadAdapterDestination(destinationHash);
+        } else if (placeService == " " && budgetService !=" "){
+            HashMap <String, String> budgetHash = new HashMap<>();
+            budgetHash.put("budget", budgetService);
+            budgetHash.put("order", orderBy);
+            budgetHash.put("user_id", channel);
+            loadAdapterBudget(budgetHash);
+        }
+    }
+
 
     /**Adapter**/
 

@@ -100,8 +100,15 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.MyViewHolder> 
         holder.trip_date.setText(trip.getTrip_date().toString());
         holder.likes.setText(Integer.toString(trip.getLikes())+ " likes");
         Glide.with(mContext).load(trip.getPhoto()).apply(RequestOptions.circleCropTransform()).into(holder.user_image);
+        if (trip.getLiked() == 1){
+            holder.likeBtn.setSelected(true);
+            holder.likeText.setText("Liked");
+        }else {
+            holder.likeBtn.setSelected(false);
+            holder.likeText.setText("Like");
+        }
         Glide.with(mContext).load(trip.getTrip_image()).into(holder.trip_image);
-       holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
