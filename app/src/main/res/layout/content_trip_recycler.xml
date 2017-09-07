@@ -17,6 +17,18 @@
         </Spinner>
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/txtNoTrips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout"
+        android:textAlignment="center"
+        android:gravity="center_vertical"
+        android:textSize="24dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:visibility="invisible"
+        android:text="Search your next budget"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"

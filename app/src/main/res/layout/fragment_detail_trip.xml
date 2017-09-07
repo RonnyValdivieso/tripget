@@ -65,14 +65,16 @@
                     android:layout_height="wrap_content"
                     android:text="@string/budget_for"
                     android:id="@+id/labelBudgetFor" />
+
                 <TextView
+                    android:id="@+id/guest_duration_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Solo / Weekend"
                     android:layout_alignParentTop="true"
-                    android:layout_toRightOf="@+id/labelBudgetFor"
+                    android:layout_marginLeft="16dp"
                     android:layout_toEndOf="@+id/labelBudgetFor"
-                    android:layout_marginLeft="16dp" />
+                    android:layout_toRightOf="@+id/labelBudgetFor"
+                    android:text="Solo / Weekend" />
             </RelativeLayout>
             <include layout="@layout/detail_form"></include>
 

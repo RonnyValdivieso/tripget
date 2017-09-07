@@ -31,14 +31,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    tools:ignore="UseCompoundDrawables">
+                    tools:ignore="UseCompoundDrawables,UselessParent">
                     <ImageButton
                         android:id="@+id/likeActionTrip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:srcCompat="@drawable/selector"
                         style="@style/Custom.ImageButton"
-                        />
+                        android:contentDescription=""
+                        tools:ignore="ContentDescription" />
                     <TextView
                         android:id="@+id/likeText"
                         android:layout_width="wrap_content"

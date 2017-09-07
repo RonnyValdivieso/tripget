@@ -36,20 +36,15 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GetTokenResult;
-import com.tripget.tripget.Adapters.TripAdapter;
 import com.tripget.tripget.Conexion.Constantes;
-import com.tripget.tripget.Conexion.GlobalVariable;
 import com.tripget.tripget.Conexion.VolleySingleton;
+import com.tripget.tripget.Fragments.AboutUsFragment;
 import com.tripget.tripget.Fragments.BestBudgetFragment;
 import com.tripget.tripget.Fragments.DetailTripFragment;
 import com.tripget.tripget.Fragments.MyTripsFragment;
 import com.tripget.tripget.Fragments.NotificationFragment;
-import com.tripget.tripget.Model.Trip;
 import com.tripget.tripget.R;
 import com.tripget.tripget.Fragments.TripFormFragment;
 
@@ -57,7 +52,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -69,7 +63,8 @@ public class MainActivity extends AppCompatActivity
         BestBudgetFragment.OnFragmentInteractionListener,
         NotificationFragment.OnFragmentInteractionListener,
         DetailTripFragment.OnFragmentInteractionListener,
-        MyTripsFragment.OnFragmentInteractionListener{
+        MyTripsFragment.OnFragmentInteractionListener,
+        AboutUsFragment.OnFragmentInteractionListener{
 
     private static final String TAG = "users" ;
     //Visual elements
@@ -79,7 +74,7 @@ public class MainActivity extends AppCompatActivity
 	private FloatingActionButton fab;
     private String idTokenFinal;
 
-    HashMap <String,String> userHash;
+    private HashMap <String,String> userHash;
 
 	//Google Api Client
 
@@ -288,7 +283,12 @@ public class MainActivity extends AppCompatActivity
             fragment = new NotificationFragment();
             callFragment();
 
-        } else if (id == R.id.nav_exit) {
+        }
+        else if (id == R.id.about_us){
+            fragment =  new AboutUsFragment();
+            callFragment();
+        }
+        else if (id == R.id.nav_exit) {
             logOut();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -323,9 +323,6 @@ public class MainActivity extends AppCompatActivity
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
                                         Log.d(TAG, "ERROR VOLLEY: " + error.getMessage());
-                                        /*HashMap <String,String> userAuthHash = new LinkedHashMap<>();
-                                        userAuthHash.put("account_id", idTokenFinal);
-                                        loadAdapterAuthUser(userAuthHash);*/
                                     }
                                 }) {
                             @Override

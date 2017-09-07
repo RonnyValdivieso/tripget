@@ -190,10 +190,7 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
        buttonfragment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 loadUploadTrip();
-                /*Snackbar.make(view, R.string.story_saved, Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();*/
             }
         });
 
@@ -307,6 +304,7 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
             switch (status){
                 case "1":
                     Snackbar.make(view, R.string.story_saved, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                    cleanFields();
 
                 case "2": //FAIL
                     String message2 =  response.getString("message");
@@ -316,6 +314,22 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
         }catch (JSONException e){
             e.printStackTrace();
         }
+    }
+
+    private void cleanFields() {
+
+        titleTrip.setText("");
+        story_review.setText("");
+        mautoCompleteTextView.setText("");
+        date_choose.setText("");
+        photo_gallery_pick.setImageDrawable(null);
+        food.setText("");
+        accomodation.setText("");
+        trip_transportation.setText("");
+        local_transportation.setText("");
+        entertaiment.setText("");
+        shopping.setText("");
+        placeId = "";
     }
 
     private void showDatePicker() {

@@ -1,6 +1,14 @@
 package com.tripget.tripget.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,9 +16,13 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.tripget.tripget.Activity.MainActivity;
+import com.tripget.tripget.Fragments.DetailTripFragment;
+import com.tripget.tripget.Fragments.TripFormFragment;
 import com.tripget.tripget.R;
 import com.tripget.tripget.Model.Trip;
 import com.tripget.tripget.common.logger.Log;
@@ -22,14 +34,20 @@ import java.util.List;
 
 public class TripAdapter extends RecyclerView.Adapter<TripAdapter.MyViewHolder> {
 
-
     private Context mContext;
     private List<Trip> trips;
+    MainActivity myActivity = (MainActivity) mContext;
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView username, total_budget, title, trip_date, likes, likeText;
         public ImageView user_image, trip_image;
         public ImageButton likeBtn;
+        public CardView cardView;
+
+
+
+
 
         public MyViewHolder(View view) {
             super(view);
@@ -46,6 +64,8 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.MyViewHolder> 
 
             likeBtn = (ImageButton) view.findViewById(R.id.likeActionTrip);
 
+            cardView = (CardView) view.findViewById(R.id.cardView);
+
             likeBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View button) {
@@ -58,7 +78,6 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.MyViewHolder> 
                     }
                 }
             });
-
         }
     }
     public TripAdapter(Context mContext, List<Trip> trips) {
@@ -68,25 +87,39 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.MyViewHolder> 
     @Override
     public TripAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.trip_cardview, parent,false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.trip_cardview, parent,false);
+
         return new TripAdapter.MyViewHolder(itemView);
     }
     @Override
-    public void onBindViewHolder(TripAdapter.MyViewHolder holder, int position) {
-
-        Trip trip = trips.get(position);
-        holder.username.setText(trips.get(position).getUsername());
+    public void onBindViewHolder(TripAdapter.MyViewHolder holder, final int position) {
+        final Trip trip = trips.get(position);
+        holder.username.setText(trip.getUsername());
         holder.total_budget.setText("$ "+Integer.toString(trips.get(position).getBudget()));
         holder.title.setText(trip.getTitle());
         holder.trip_date.setText(trip.getTrip_date().toString());
         holder.likes.setText(Integer.toString(trip.getLikes())+ " likes");
         Glide.with(mContext).load(trip.getPhoto()).apply(RequestOptions.circleCropTransform()).into(holder.user_image);
         Glide.with(mContext).load(trip.getTrip_image()).into(holder.trip_image);
+       holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                DetailTripFragment myFragment = new DetailTripFragment();
+                //Create a bundle to pass data, add data, set the bundle to your fragment and:
+
+                Bundle bundle = new Bundle();
+                bundle.putString("id", String.valueOf(trip.getId()));
+                myFragment.setArguments(bundle);
+                activity.getSupportFragmentManager().beginTransaction().replace(R.id.main_content, myFragment).addToBackStack(null).commit();
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return trips.size();
     }
+
 }

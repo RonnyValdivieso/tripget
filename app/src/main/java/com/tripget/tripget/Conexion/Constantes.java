@@ -20,6 +20,7 @@ public class Constantes {
 
     //GET DATA
     public static final String GET_TRIPS = URL + "/getTrips.php";
+    public static final String GET_TRIP_BY_ID = URL + "/getTripById.php";
     public static final String GET_TRIPS_BY_BUDGET = URL + "/getTripsByBudget.php";
     public static final String  GET_TRIPS_BY_DESTINATION = URL + "/getTripsByDestination.php";
     public static final String  GET_TRIPS_BY_USER_ID = URL + "/getTripsByUserId.php";

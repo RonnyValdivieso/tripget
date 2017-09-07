@@ -31,6 +31,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -59,6 +60,7 @@ import com.tripget.tripget.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -91,6 +93,7 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
     private Spinner spinnerFilter;
     private ImageButton searchButton;
     private EditText destination, budget;
+    private TextView txtNoTrips;
     String destination_get, budget_get;
     private String placeId = " ";
 
@@ -164,13 +167,15 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
         //destination= (EditText) view.findViewById(R.id.destination_search);
         budget = (EditText) view.findViewById(R.id.budget_search);
         imageViewBack = (ImageView)view.findViewById(R.id.backrop);
+        txtNoTrips = (TextView)view.findViewById(R.id.txtNoTrips);
+        txtNoTrips.setVisibility(View.VISIBLE);
+        txtNoTrips.setText("Search your next trip budget");
         recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
 
 
         // Retrieve the AutoCompleteTextView that will display Place suggestions.
         mAutocompleteView = (AutoCompleteTextView) view.findViewById(R.id.autocomplete_places);
         mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
-
 
         //Elements in Action
 
@@ -230,7 +235,6 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
 
         return view;
     }
-
 
     /**Adapter**/
 
@@ -367,6 +371,7 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
 
             switch (status){
                 case "1":
+                    txtNoTrips.setVisibility(View.INVISIBLE);
                     JSONArray tripsJson = response.getJSONArray("trips");
                     System.out.print(tripsJson.toString());
                     Trip[] trips  = gson.fromJson(tripsJson.toString(), Trip[].class);
@@ -376,7 +381,9 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
 
                 case "2": //FAIL
                     String message2 =  response.getString("message");
-                    Toast.makeText(activity,message2, Toast.LENGTH_SHORT).show();
+                    txtNoTrips.setVisibility(View.VISIBLE);
+                    txtNoTrips.setText("No trips available");
+                    /*Toast.makeText(activity,message2, Toast.LENGTH_SHORT).show();*/
                     break;
             }
         }catch (JSONException e){

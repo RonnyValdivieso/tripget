@@ -22,6 +22,7 @@
             android:layout_height="48dp"
             app:srcCompat="@drawable/ic_flight_takeoff"/>
         <TextView
+            android:id="@+id/detailFieldTransportationTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/detailFieldTransportation"
@@ -43,6 +44,7 @@
             android:layout_height="48dp"
             app:srcCompat="@drawable/ic_local_hotel"/>
         <TextView
+            android:id="@+id/detailFieldAccommodationTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/detailFieldAccommodation"
@@ -74,6 +76,7 @@
                 android:layout_height="48dp"
                 app:srcCompat="@drawable/ic_local_dining"/>
             <TextView
+                android:id="@+id/detailFieldFoodTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/detailFieldFood"
@@ -95,6 +98,7 @@
                 android:layout_height="48dp"
                 app:srcCompat="@drawable/ic_directions_bus_black_24dp"/>
             <TextView
+                android:id="@+id/detailFieldLocalTransportationTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/detailFieldLocalTransportation"
@@ -125,6 +129,7 @@
                 android:layout_height="48dp"
                 app:srcCompat="@drawable/ic_local_activity"/>
             <TextView
+                android:id="@+id/detailFieldEnterTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/detailFieldEnter"
@@ -146,6 +151,7 @@
                 android:layout_height="48dp"
                 app:srcCompat="@drawable/ic_local_mall"/>
             <TextView
+                android:id="@+id/detailFieldShoppingTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/detailFieldShopping"
