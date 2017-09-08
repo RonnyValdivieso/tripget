@@ -1,0 +1,46 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/reviewTripInsideEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context="com.tripget.tripget.Fragments.TripEditFragment"
+        android:weightSum="1">
+        <include layout="@layout/form_image_header"></include>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="@dimen/space_section">
+
+            <EditText
+                android:id="@+id/titleTripEditFrag"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/trip_title" />
+
+            <include layout="@layout/form_story"></include>
+            <include layout="@layout/form_spinners"></include>
+            <include layout="@layout/form_fields" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/edit_review_trip"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true"
+            android:layout_gravity="bottom"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/primaryBackground"
+            android:text="@string/submit"
+            tools:ignore="ObsoleteLayoutParam" />
+    </LinearLayout>
+
+</ScrollView>
+

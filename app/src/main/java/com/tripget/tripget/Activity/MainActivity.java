@@ -45,6 +45,7 @@ import com.tripget.tripget.Fragments.BestBudgetFragment;
 import com.tripget.tripget.Fragments.DetailTripFragment;
 import com.tripget.tripget.Fragments.MyTripsFragment;
 import com.tripget.tripget.Fragments.NotificationFragment;
+import com.tripget.tripget.Fragments.TripEditFragment;
 import com.tripget.tripget.R;
 import com.tripget.tripget.Fragments.TripFormFragment;
 
@@ -64,7 +65,8 @@ public class MainActivity extends AppCompatActivity
         NotificationFragment.OnFragmentInteractionListener,
         DetailTripFragment.OnFragmentInteractionListener,
         MyTripsFragment.OnFragmentInteractionListener,
-        AboutUsFragment.OnFragmentInteractionListener{
+        AboutUsFragment.OnFragmentInteractionListener,
+        TripEditFragment.OnFragmentInteractionListener{
 
     private static final String TAG = "users" ;
     //Visual elements
@@ -401,7 +403,7 @@ public class MainActivity extends AppCompatActivity
                 case "2": //FAIL
                     String message2 =  response.getString("message");
                     loadAdapterUsers(userHash);
-                    Toast.makeText(MainActivity.this,message2, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this,message2, Toast.LENGTH_SHORT).show();
                     break;
             }
         }catch (JSONException e){

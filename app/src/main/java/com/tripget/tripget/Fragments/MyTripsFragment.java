@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -65,6 +66,9 @@ public class MyTripsFragment extends Fragment {
     Activity activity ;
 
     SharedPreferences sharedpreferences;
+
+    private String orderBy = "0";
+    private boolean ban = false;
 
 
     public MyTripsFragment() {
@@ -115,16 +119,34 @@ public class MyTripsFragment extends Fragment {
 
         sharedpreferences = this.getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
 
-        String channel = (sharedpreferences.getString("id", ""));
-        HashMap<String,String> userTripHash = new LinkedHashMap<>();
-        userTripHash.put("user_id", channel);
-        loadAdapterUserTrips(userTripHash);
+        spinnerFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                orderBy = String.valueOf(position);
+                loadAdapterUserTrips(orderBy);
+            }
 
-        //
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                orderBy = "0";
+                loadAdapterUserTrips(orderBy);
+            }
+        });
+
+
+        //loadAdapterUserTrips(userTripHash);
+
+
         return view;
     }
 
-    private void loadAdapterUserTrips(HashMap<String, String> userTripHash) {
+    private void loadAdapterUserTrips(String orderBy) {
+
+        String channel = (sharedpreferences.getString("id", ""));
+
+        HashMap<String,String> userTripHash = new LinkedHashMap<>();
+        userTripHash.put("user_id", channel);
+        userTripHash.put("order", orderBy);
 
         JSONObject jobject = new JSONObject(userTripHash);
 

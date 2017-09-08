@@ -75,7 +75,6 @@ public class AboutUsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-
         view = inflater.inflate(R.layout.fragment_about_us, container, false);
 
         ronny = (ImageView)view.findViewById(R.id.Ronny);

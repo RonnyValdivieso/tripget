@@ -98,12 +98,10 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
     private String destination_get, budget_get;
     private String placeId = " ";
     private String orderBy;
-private boolean ban = false;
+    private boolean ban = false;
 
 
-   private String placeService, budgetService;
-
-
+    private String placeService, budgetService;
     SharedPreferences sharedpreferences;
 
     //GooglePlaces
@@ -238,6 +236,7 @@ private boolean ban = false;
                     if (placeId.toString() != " " && budget.getText().length()!=0){
                         placeService = placeId.toString();
                         budgetService = String.valueOf(budget.getText());
+                        placeId = " ";
                         sendHashMapToService(placeService, budgetService);
                     } else if (placeId.toString() != " " && budget.getText().length()== 0 ){
                         budgetService = " ";

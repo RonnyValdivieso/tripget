@@ -61,7 +61,7 @@ public class DetailTripFragment extends Fragment {
 
     private TextView budgetFor, budgetTotal;
 
-    private TextView username,title,date,context;
+    private TextView username,title,date;
 
     private ImageView userImage, tripImage;
 
@@ -97,6 +97,7 @@ public class DetailTripFragment extends Fragment {
         tripImage = (ImageView)rootView.findViewById(R.id.tripImgCard);
         budgetTotal = (TextView)rootView.findViewById(R.id.totalBudgetTrip);
         budgetFor = (TextView)rootView.findViewById(R.id.guest_duration_txt);
+        date = (TextView)rootView.findViewById(R.id.dateTripCard);
 
         expTv1 = (ExpandableTextView) rootView.findViewById(R.id.expand_text_view);
 
@@ -217,7 +218,7 @@ public class DetailTripFragment extends Fragment {
                     detailLocalTransportationTxt.setText(userNow.getString("local_transportation"));
                     detailEnterTxt.setText(userNow.getString("entertainment"));
                     detailShoppingTxt.setText(userNow.getString("shopping"));
-
+                    date.setText(userNow.getString("trip_date"));
 
                     budgetFor.setText(guest + " / " + trip_duration);
 

@@ -43,6 +43,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -82,7 +84,7 @@ import java.util.Map;
  * {@link TripFormFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  */
-public class TripFormFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks{
+public class TripEditFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks{
 
     private OnFragmentInteractionListener mListener;
     private static final int PICK_IMAGE = 100;
@@ -99,6 +101,7 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
     Spinner spinner_trip_type;
     Spinner spinner_trip_duration;
     SharedPreferences sharedpreferences;
+    String myInt;
 
     //GooglePlaces
     private static final String TAG = BestBudgetFragment.class.getSimpleName();
@@ -111,7 +114,7 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
 
 
 
-    public TripFormFragment() {
+    public TripEditFragment() {
         // Required empty public constructor
     }
 
@@ -119,6 +122,10 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mGoogleApiClient = new GoogleApiClient.Builder(this.getActivity()).addConnectionCallbacks(this).addApi(Places.GEO_DATA_API).build();
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            myInt = bundle.getString("id", "");
+        }
     }
 
     @Override
@@ -144,9 +151,11 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
 
         // Inflate the layout for this fragment
 
-        view = inflater.inflate(R.layout.fragment_trip_form, container, false);
+        loadTripData(myInt);
 
-        titleTrip = (EditText)view.findViewById(R.id.titleTripEdit);
+        view = inflater.inflate(R.layout.fragment_trip_edit, container, false);
+
+        titleTrip = (EditText)view.findViewById(R.id.titleTripEditFrag);
         story_review = (EditText)view.findViewById(R.id.story_review_text);
         food = (EditText)view.findViewById(R.id.formFieldFoodTxt);
         trip_transportation = (EditText)view.findViewById(R.id.formFieldTransportationTxt);
@@ -154,7 +163,7 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
         entertaiment = (EditText)view.findViewById(R.id.formFieldEnterTxt);
         shopping = (EditText)view.findViewById(R.id.formFieldShoppingTxt);
         accomodation = (EditText)view.findViewById(R.id.formFieldAccommodationTxt);
-        buttonfragment = (Button)view.findViewById(R.id.save_review);
+        buttonfragment = (Button)view.findViewById(R.id.edit_review_trip);
         photo_gallery_pick = (ImageView)view.findViewById(R.id.upload_photo_cont);
         buttonDatePicker = (Button)view.findViewById(R.id.button_date_picker);
         buttonphoto = (ImageButton) view.findViewById(R.id.upload_photo);
@@ -182,6 +191,9 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
         spinner_trip_type.setAdapter(adapterTripType);
         spinner_trip_duration.setAdapter(adapterTripDuration);
 
+
+
+
         spinner_trip_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -205,7 +217,7 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                guest_id = "0";
+                    guest_id = "0";
             }
         });
 
@@ -233,18 +245,18 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                duration_trip = "0";
+                    duration_trip = "0";
             }
         });
 
 
-       buttonphoto.setOnClickListener(new View.OnClickListener() {
+        buttonphoto.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 openGallery();
             }
         });
 
-       buttonfragment.setOnClickListener(new View.OnClickListener() {
+        buttonfragment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 loadUploadTrip();
@@ -292,6 +304,80 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
         return view;
     }
 
+    private void loadTripData(String myInt) {
+
+        HashMap <String,String> tripHash = new LinkedHashMap<>();
+        tripHash.put("id", myInt);
+        JSONObject jobjecthis = new JSONObject(tripHash);
+
+        Log.d(TAG, jobjecthis.toString());
+        VolleySingleton.getInstance(getContext()).
+                addToRequestQueue(
+                        new JsonObjectRequest(Request.Method.POST,
+                                Constantes.GET_TRIP_BY_ID,
+                                jobjecthis,
+                                new Response.Listener<JSONObject>(){
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        getTripDetailJson(response);
+                                    }
+                                },
+                                new Response.ErrorListener(){
+
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Log.d(TAG, "ERROR VOLLEY: " + error.getMessage());
+                                    }
+                                }) {
+                            @Override
+                            public Map<String, String> getHeaders() {
+                                Map<String, String> headers = new HashMap<String, String>();
+                                headers.put("Content-Type", "application/json; charset=utf-8");
+                                headers.put("Accept", "application/json");
+                                return headers;
+                            }
+                            @Override
+                            public String getBodyContentType() {
+                                return "application/json; charset=utf-8" + getParamsEncoding();
+                            }
+                        }
+                );
+    }
+
+    private void getTripDetailJson(JSONObject response) {
+
+        try {
+            String status = response.getString("status");
+            System.out.print(status);
+
+            switch (status){
+                case "1":
+
+                    JSONArray usersJson = response.getJSONArray("trips");
+                    JSONObject userNow = usersJson.getJSONObject(0);
+
+                    titleTrip.setText(userNow.getString("title"));
+                    story_review.setText(userNow.getString("content"));
+                    food.setText(userNow.getString("food"));
+                    accomodation.setText(userNow.getString("accommodation"));
+                    trip_transportation.setText(userNow.getString("trip_transportation"));
+                    local_transportation.setText(userNow.getString("local_transportation"));
+                    entertaiment.setText(userNow.getString("entertainment"));
+                    shopping.setText(userNow.getString("shopping"));
+                    date_choose.setText(userNow.getString("trip_date"));
+
+                    break;
+
+                case "2": //FAIL
+                    String message2 =  response.getString("message");
+                    Toast.makeText(this.getContext(),message2, Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+    }
+
     private void loadUploadTrip() {
 
         String image = getStringImage(bitmap);
@@ -311,12 +397,10 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
         tripHash.put("entertainment", String.valueOf(entertaiment.getText()));
         tripHash.put("shopping", String.valueOf(shopping.getText()));
         tripHash.put("guest_id", guest_id);
-        tripHash.put("trip_duration_id",duration_trip);
+        tripHash.put("trip_duration_id", duration_trip);
         tripHash.put("user_id", channel);
 
         JSONObject jobject = new JSONObject(tripHash);
-
-        //Log.d(TAG, jobject.toString());
         final ProgressDialog loading = ProgressDialog.show(this.getContext(),"Uploading...","Please wait...",false,false);
 
         VolleySingleton.getInstance(getContext()).
@@ -411,7 +495,7 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
 
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
-           String monthReal =  String.format("%02d", monthOfYear+1);
+            String monthReal =  String.format("%02d", monthOfYear+1);
             //String.valueOf(monthOfYear+1)
             String dayReal = String.format("%02d", dayOfMonth);
             date_choose.setText(String.valueOf(year) + "-" + monthReal + "-" + dayReal);

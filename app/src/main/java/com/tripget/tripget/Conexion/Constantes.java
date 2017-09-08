@@ -27,4 +27,6 @@ public class Constantes {
     public static final String GET_ID_BY_TOKEN = URL + "/getIdByToken.php";
     public static final String  INSERT_USER = URL + "/setUser.php";
     public static final String INSERT_TRIP = URL + "/setTrip.php";
+    public static final String DELETE_TRIP = URL + "/deleteTrip.php";
+    public static final String EDIT_TRIP = URL + "/";
 }
