@@ -53,7 +53,7 @@
                         android:id="@+id/budget_search"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="$Budget"
+                        android:hint="@string/budget"
                         android:inputType="number"
                         android:textAlignment="center"
                         tools:ignore="HardcodedText" />

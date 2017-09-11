@@ -57,15 +57,11 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.MyViewHolder> 
     SharedPreferences sharedpreferences;
 
 
-
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView username, total_budget, title, trip_date, likes, likeText;
         public ImageView user_image, trip_image;
         public ImageButton likeBtn;
         public CardView cardView;
-
-
-
 
 
         public MyViewHolder(View view) {
@@ -123,14 +119,14 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.MyViewHolder> 
         holder.total_budget.setText("$ "+Integer.toString(trips.get(position).getBudget()));
         holder.title.setText(trip.getTitle());
         holder.trip_date.setText(trip.getTrip_date().toString());
-        holder.likes.setText(Integer.toString(trip.getLikes())+ " likes");
+        holder.likes.setText(Integer.toString(trip.getLikes())+ mContext.getString(R.string.likes));
         Glide.with(mContext).load(trip.getPhoto()).apply(RequestOptions.circleCropTransform()).into(holder.user_image);
         if (trip.getLiked() == 1){
             holder.likeBtn.setSelected(true);
-            holder.likeText.setText("Liked");
+            holder.likeText.setText(R.string.liked);
         }else {
             holder.likeBtn.setSelected(false);
-            holder.likeText.setText("Like");
+            holder.likeText.setText(R.string.like_one);
         }
         Glide.with(mContext).load(trip.getTrip_image()).into(holder.trip_image);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -154,14 +150,13 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.MyViewHolder> 
 
                 if (v.isSelected()){
                     holder.likeBtn.setSelected(false);
-                    holder.likeText.setText("Like");
+                    holder.likeText.setText(R.string.liked);
                 } else {
                     holder.likeBtn.setSelected(true);
-                    holder.likeText.setText("Liked");
+                    holder.likeText.setText(R.string.like_one);
                     String channel = (sharedpreferences.getString("id", ""));
                     loadLike(trip.getId(), channel);
                 }
-                //
             }
         });
     }

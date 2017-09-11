@@ -99,6 +99,7 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
     private String placeId = " ";
     private String orderBy;
     private boolean ban = false;
+    private boolean banPlaceErase = false;
 
 
     private String placeService, budgetService;
@@ -175,7 +176,7 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
         imageViewBack = (ImageView)view.findViewById(R.id.backrop);
         txtNoTrips = (TextView)view.findViewById(R.id.txtNoTrips);
         txtNoTrips.setVisibility(View.VISIBLE);
-        txtNoTrips.setText("Search your next trip budget");
+        txtNoTrips.setText(R.string.search_find);
         recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
 
 
@@ -231,17 +232,19 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
             public void onClick(View view) {
 
 
+                if(mAutocompleteView.getText().length() == 0){
+                    placeId = " ";
+                }
+
                 if (placeId.toString() != " " || budget.getText().length()!=0){
                     ban = true;
                     if (placeId.toString() != " " && budget.getText().length()!=0){
                         placeService = placeId.toString();
                         budgetService = String.valueOf(budget.getText());
-                        placeId = " ";
                         sendHashMapToService(placeService, budgetService);
-                    } else if (placeId.toString() != " " && budget.getText().length()== 0 ){
+                    } else if (placeId.toString() != " " && budget.getText().length()== 0){
                         budgetService = " ";
                         placeService = placeId.toString();
-                        placeId = " ";
                         sendHashMapToService(placeService, budgetService);
                     } else if (placeId.toString() == " " && budget.getText().length()!=0){
                         budgetService = String.valueOf(budget.getText());
@@ -250,7 +253,7 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
                     }
                 }else {
                     placeId = " ";
-                    Toast.makeText(getContext(), "Search by destination, budget or both", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), R.string.search_by, Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -296,7 +299,6 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
 
     public void loadAdapterTrips(HashMap<String, String> tripHash){
 
-        //destination_get = tripHash.get("destination");
         JSONObject jobjecthis = new JSONObject(tripHash);
 
         Log.d(TAG, jobjecthis.toString());
@@ -425,6 +427,7 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
 
             switch (status){
                 case "1":
+                    recyclerView.setVisibility(View.VISIBLE);
                     txtNoTrips.setVisibility(View.INVISIBLE);
                     JSONArray tripsJson = response.getJSONArray("trips");
                     System.out.print(tripsJson.toString());
@@ -434,10 +437,9 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
                     adapter.notifyDataSetChanged();
                     break;
                 case "2": //FAIL
-                    String message2 =  response.getString("message");
+                    recyclerView.setVisibility(View.INVISIBLE);
                     txtNoTrips.setVisibility(View.VISIBLE);
-                    txtNoTrips.setText("No trips available");
-                    /*Toast.makeText(activity,message2, Toast.LENGTH_SHORT).show();*/
+                    txtNoTrips.setText(R.string.no_trips);
                     break;
             }
         }catch (JSONException e){
