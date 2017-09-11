@@ -294,7 +294,7 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
 
     private void loadUploadTrip() {
 
-        String image = getStringImage(bitmap);
+        //String image = getStringImage(bitmap);
         String channel = (sharedpreferences.getString("id", ""));
 
         // String
@@ -303,7 +303,7 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
         tripHash.put("content", story_review.getText().toString());
         tripHash.put("destination",placeId.toString());
         tripHash.put("trip_date", date_choose.getText().toString());
-        tripHash.put("trip_image",image);
+        //tripHash.put("trip_image",image);
         tripHash.put("food",String.valueOf(food.getText()));
         tripHash.put("accommodation", String.valueOf(accomodation.getText()));
         tripHash.put("trip_transportation", String.valueOf(trip_transportation.getText()));
@@ -362,9 +362,10 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
                 case "1":
                     Snackbar.make(view, R.string.story_saved, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                     cleanFields();
-
+                    break;
                 case "2": //FAIL
-                    String message2 =  response.getString("message");
+                    //String message2 =  response.getString("message");
+                    Snackbar.make(view, R.string.went_wrong, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                     //Toast.makeText(activity,message2, Toast.LENGTH_SHORT).show();
                     break;
             }

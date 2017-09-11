@@ -28,5 +28,6 @@ public class Constantes {
     public static final String  INSERT_USER = URL + "/setUser.php";
     public static final String INSERT_TRIP = URL + "/setTrip.php";
     public static final String DELETE_TRIP = URL + "/deleteTrip.php";
-    public static final String EDIT_TRIP = URL + "/";
+    public static final String INSERT_LIKE = URL + "/setLike.php";
+    public static final String EDIT_TRIP = URL + "/updateTrip.php";
 }

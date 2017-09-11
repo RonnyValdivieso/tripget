@@ -34,4 +34,5 @@
     <string name="welcome_tripget">Welcome to Tripget</string>
     <string name="about_us">About us</string>
     <string name="string_about_us">Tripget es un sistema de recomendación de viajes basados en opiniones de los usuarios. Su principal característica, es que la búsqueda se basa en un presupuesto dado por el usuario, y los resultados son generados de acuerdo a reseñas apegadas a ese criterio</string>
+    <string name="went_wrong">Something went wrong, try again</string>
 </resources>

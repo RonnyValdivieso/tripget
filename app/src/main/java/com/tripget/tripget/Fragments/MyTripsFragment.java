@@ -133,10 +133,6 @@ public class MyTripsFragment extends Fragment {
             }
         });
 
-
-        //loadAdapterUserTrips(userTripHash);
-
-
         return view;
     }
 

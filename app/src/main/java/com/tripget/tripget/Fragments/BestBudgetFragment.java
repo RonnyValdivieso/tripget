@@ -432,7 +432,7 @@ public class BestBudgetFragment extends Fragment implements GoogleApiClient.OnCo
                     adapter = new TripAdapter(activity, Arrays.asList(trips));
                     recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
-
+                    break;
                 case "2": //FAIL
                     String message2 =  response.getString("message");
                     txtNoTrips.setVisibility(View.VISIBLE);

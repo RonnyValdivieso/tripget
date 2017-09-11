@@ -111,6 +111,7 @@ public class TripEditFragment extends Fragment implements GoogleApiClient.OnConn
     private String placeId;
     private String guest_id;
     private String duration_trip;
+    private String id_trip;
 
 
 
@@ -356,6 +357,8 @@ public class TripEditFragment extends Fragment implements GoogleApiClient.OnConn
                     JSONArray usersJson = response.getJSONArray("trips");
                     JSONObject userNow = usersJson.getJSONObject(0);
 
+                    id_trip = userNow.getString("id");
+
                     titleTrip.setText(userNow.getString("title"));
                     story_review.setText(userNow.getString("content"));
                     food.setText(userNow.getString("food"));
@@ -380,16 +383,17 @@ public class TripEditFragment extends Fragment implements GoogleApiClient.OnConn
 
     private void loadUploadTrip() {
 
-        String image = getStringImage(bitmap);
-        String channel = (sharedpreferences.getString("id", ""));
+       // String image = getStringImage(bitmap);
+        //String channel = (sharedpreferences.getString("id", ""));
 
         // String
         HashMap<String,String> tripHash = new LinkedHashMap<>();
+        tripHash.put("id", id_trip);
         tripHash.put("title", titleTrip.getText().toString());
         tripHash.put("content", story_review.getText().toString());
         tripHash.put("destination",placeId.toString());
         tripHash.put("trip_date", date_choose.getText().toString());
-        tripHash.put("trip_image",image);
+        //tripHash.put("trip_image",image);
         tripHash.put("food",String.valueOf(food.getText()));
         tripHash.put("accommodation", String.valueOf(accomodation.getText()));
         tripHash.put("trip_transportation", String.valueOf(trip_transportation.getText()));
@@ -398,7 +402,7 @@ public class TripEditFragment extends Fragment implements GoogleApiClient.OnConn
         tripHash.put("shopping", String.valueOf(shopping.getText()));
         tripHash.put("guest_id", guest_id);
         tripHash.put("trip_duration_id", duration_trip);
-        tripHash.put("user_id", channel);
+        //tripHash.put("user_id", channel);
 
         JSONObject jobject = new JSONObject(tripHash);
         final ProgressDialog loading = ProgressDialog.show(this.getContext(),"Uploading...","Please wait...",false,false);
@@ -406,7 +410,7 @@ public class TripEditFragment extends Fragment implements GoogleApiClient.OnConn
         VolleySingleton.getInstance(getContext()).
                 addToRequestQueue(
                         new JsonObjectRequest(Request.Method.POST,
-                                Constantes.INSERT_TRIP,
+                                Constantes.EDIT_TRIP,
                                 jobject,
                                 new Response.Listener<JSONObject>(){
                                     @Override
@@ -446,10 +450,10 @@ public class TripEditFragment extends Fragment implements GoogleApiClient.OnConn
                 case "1":
                     Snackbar.make(view, R.string.story_saved, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                     cleanFields();
-
+                    break;
                 case "2": //FAIL
-                    String message2 =  response.getString("message");
-                    //Toast.makeText(activity,message2, Toast.LENGTH_SHORT).show();
+                    //String message2 =  response.getString("message");
+                    Snackbar.make(view, R.string.went_wrong, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                     break;
             }
         }catch (JSONException e){

@@ -99,11 +99,6 @@ public class MyTripAdapter extends RecyclerView.Adapter<MyTripAdapter.MyViewHold
         holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*int newPosition = holder.getAdapterPosition();
-                Log.d("thien.van","on Click onBindViewHolder");
-                trips.remove(newPosition);
-                notifyItemRemoved(newPosition);
-                notifyItemRangeChanged(newPosition, trips.size());*/
                 deleteTrip(String.valueOf(trip.getId()));
             }
         });
