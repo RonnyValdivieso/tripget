@@ -42,7 +42,8 @@
     <string name="likes">me gusta</string>
     <string name="delete">Sucess delete</string>
     <string name="liked"> me gusta</string>
-
     <string name="like_one"> me gusta</string>
     <string name="budget">$Presupuesto</string>
+    <string name="welcome">Bienvenido a Tripget</string>
+
 </resources>

@@ -421,13 +421,13 @@ public class MainActivity extends AppCompatActivity
                 case "1":
                     /*HashMap <String,String> userAuthHash = new LinkedHashMap<>();
                     userAuthHash.put("account_id", idTokenFinal);*/
-                    Toast.makeText(MainActivity.this,"Welcome to Tripget", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, R.string.welcome, Toast.LENGTH_SHORT).show();
                     loadAdapterAuthUser(userHash);
                     idTokenFinal="";
                     break;
                 case "2":
                     idTokenFinal = "";
-                    Toast.makeText(MainActivity.this,"An error has occur, try again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,R.string.went_wrong, Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
             e.printStackTrace();
