@@ -422,6 +422,7 @@ public class MainActivity extends AppCompatActivity
                     /*HashMap <String,String> userAuthHash = new LinkedHashMap<>();
                     userAuthHash.put("account_id", idTokenFinal);*/
                     Toast.makeText(MainActivity.this,"Welcome to Tripget", Toast.LENGTH_SHORT).show();
+                    loadAdapterAuthUser(userHash);
                     idTokenFinal="";
                     break;
                 case "2":
