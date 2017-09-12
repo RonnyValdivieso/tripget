@@ -124,6 +124,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.MyViewHolder> 
         if (trip.getLiked() == 1){
             holder.likeBtn.setSelected(true);
             holder.likeText.setText(R.string.liked);
+            holder.likeBtn.setEnabled(false);
         }else {
             holder.likeBtn.setSelected(false);
             holder.likeText.setText(R.string.like_one);
@@ -156,12 +157,13 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.MyViewHolder> 
                     holder.likeText.setText(R.string.like_one);
                     String channel = (sharedpreferences.getString("id", ""));
                     loadLike(trip.getId(), channel);
+                    holder.likeBtn.setEnabled(false);
                 }
             }
         });
     }
 
-    private void loadLike(int id, String channel) {
+    private void loadLike(int id, String channel ) {
 
         HashMap <String,String> tripHash = new LinkedHashMap<>();
         tripHash.put("trip_id", String.valueOf(id));

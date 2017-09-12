@@ -108,7 +108,7 @@ public class TripEditFragment extends Fragment implements GoogleApiClient.OnConn
     protected GoogleApiClient mGoogleApiClient;
     private PlaceAutocompleteAdapter mAdapter;
     private AutoCompleteTextView mAutocompleteView;
-    private String placeId;
+    private String placeId = " ";
     private String guest_id;
     private String duration_trip;
     private String id_trip;
@@ -189,10 +189,6 @@ public class TripEditFragment extends Fragment implements GoogleApiClient.OnConn
         //destinationView.setAdapter(adapterCountries);
         spinner_trip_type.setAdapter(adapterTripType);
         spinner_trip_duration.setAdapter(adapterTripDuration);
-
-
-
-
         spinner_trip_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -258,7 +254,12 @@ public class TripEditFragment extends Fragment implements GoogleApiClient.OnConn
         buttonfragment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loadUploadTrip();
+                if (placeId.toString() != " "){
+                    loadUploadTrip();
+                }else {
+                    Toast.makeText(getContext(), R.string.choose_destination, Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -447,7 +448,7 @@ public class TripEditFragment extends Fragment implements GoogleApiClient.OnConn
             switch (status){
                 case "1":
                     Snackbar.make(view, R.string.story_saved, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-                    cleanFields();
+                    //cleanFields();
                     break;
                 case "2": //FAIL
                     //String message2 =  response.getString("message");

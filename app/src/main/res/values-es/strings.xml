@@ -45,5 +45,6 @@
     <string name="like_one"> me gusta</string>
     <string name="budget">$Presupuesto</string>
     <string name="welcome">Bienvenido a Tripget</string>
+    <string name="choose_destination">Escoja un destino</string>
 
 </resources>
