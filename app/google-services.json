@@ -15,19 +15,19 @@
       },
       "oauth_client": [
         {
+          "client_id": "954600030379-vml8383hauemc81n248in8uudmoa3ut9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tripget.tripget",
+            "certificate_hash": "771eb834f758ee6c9d920a21be66ff4c2cc6e226"
+          }
+        },
+        {
           "client_id": "954600030379-bl33pdn31lmar1jeu585ok3keptldpoh.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.tripget.tripget",
             "certificate_hash": "0b4204e06e4bfbdaa99c1677f359ea5dd86cf944"
-          }
-        },
-        {
-          "client_id": "954600030379-tquubtf3giv9k1vnc59lpsh3iu0am64r.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.tripget.tripget",
-            "certificate_hash": "771eb834f758ee6c9d920a21be66ff4c2cc6e226"
           }
         },
         {
@@ -45,7 +45,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBP0xuD0U-4wP2mhT9Nm87KUyI0VdhyYrs"
+          "current_key": "AIzaSyDQ4eowfMgV_f7rOCqdixpEGNF_SED4Mhc"
         }
       ],
       "services": {
