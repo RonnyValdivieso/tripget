@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -49,6 +51,10 @@ import com.tripget.tripget.Fragments.TripEditFragment;
 import com.tripget.tripget.R;
 import com.tripget.tripget.Fragments.TripFormFragment;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,6 +62,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener,
@@ -158,6 +166,20 @@ public class MainActivity extends AppCompatActivity
 		NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 		navigationView.setNavigationItemSelectedListener(this);
 		navigationView.setCheckedItem(R.id.nav_search);
+
+	    Handler h = new Handler() {
+		    @Override
+		    public void handleMessage(Message msg) {
+
+			    if (msg.what != 1) { // code if not connected
+				    Toast.makeText(MainActivity.this, "There's no internet connection", Toast.LENGTH_SHORT).show();
+			    } else { // code if connected
+
+			    }
+		    }
+	    };
+
+	    isNetworkAvailable(h, 2000);
 
 	}
 
@@ -435,4 +457,43 @@ public class MainActivity extends AppCompatActivity
 
 
     }
+
+	public static void isNetworkAvailable(final Handler handler, final int timeout) {
+		// ask fo message '0' (not connected) or '1' (connected) on 'handler'
+		// the answer must be send before before within the 'timeout' (in milliseconds)
+
+		int delay = 5000; // delay for 5 sec.
+		int period = 10000; // repeat every 10 secs.
+
+		Timer timer = new Timer();
+
+		timer.scheduleAtFixedRate(new TimerTask() {
+
+			public void run() {
+				new Thread() {
+					private boolean responded = false;
+					@Override
+					public void run() {
+						HttpGet requestForTest = new HttpGet("http://m.google.com");
+
+						try {
+							HttpResponse resp = new DefaultHttpClient().execute(requestForTest); // can last...
+							String responseString = new BasicResponseHandler().handleResponse(resp);
+							responded = true;
+						} catch (Exception e) {
+							responded = false;
+						}
+
+						if (!responded) {
+							handler.sendEmptyMessage(0);
+						} else {
+							handler.sendEmptyMessage(1);
+						}
+					}
+				}.start();
+
+			}
+
+		}, delay, period);
+	}
 }
