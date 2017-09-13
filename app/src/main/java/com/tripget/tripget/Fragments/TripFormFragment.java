@@ -43,6 +43,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -236,7 +237,9 @@ public class TripFormFragment extends Fragment implements GoogleApiClient.OnConn
 
        buttonphoto.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                openGallery();
+               // openGallery();
+                Glide.with(getActivity()).load(R.drawable.galapagos).into(photo_gallery_pick);
+                photo_gallery_pick.setScaleType(ImageView.ScaleType.CENTER_CROP);
             }
         });
 
