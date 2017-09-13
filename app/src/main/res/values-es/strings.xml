@@ -46,5 +46,7 @@
     <string name="budget">$Presupuesto</string>
     <string name="welcome">Bienvenido a Tripget</string>
     <string name="choose_destination">Escoja un destino</string>
+    <string name="user_action_noti">le gustó tu viaje</string>
+    <string name="no_notifications">Aún no tiene notificaciones</string>
 
 </resources>

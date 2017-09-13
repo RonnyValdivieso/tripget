@@ -83,20 +83,6 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.MyViewHolder> 
 
             sharedpreferences = mContext.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
 
-
-            /*likeBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View button) {
-
-                    if (button.isSelected()){
-                        likeBtn.setSelected(false);
-                        likeText.setText("Like");
-                    } else {
-                        likeBtn.setSelected(true);
-                        likeText.setText("Liked");
-                    }
-                }
-            });*/
         }
     }
     public TripAdapter(Context mContext, List<Trip> trips) {

@@ -45,4 +45,6 @@
     <string name="budget">$Budget</string>
     <string name="welcome">Welcome to Tripget</string>
     <string name="choose_destination">First choose destination</string>
+    <string name="user_action_noti">liked your trip</string>
+    <string name="no_notifications">No notifications</string>
 </resources>
