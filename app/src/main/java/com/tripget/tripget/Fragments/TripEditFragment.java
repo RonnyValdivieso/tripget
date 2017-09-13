@@ -108,7 +108,7 @@ public class TripEditFragment extends Fragment implements GoogleApiClient.OnConn
     protected GoogleApiClient mGoogleApiClient;
     private PlaceAutocompleteAdapter mAdapter;
     private AutoCompleteTextView mAutocompleteView;
-    private String placeId;
+    private String placeId = " ";
     private String guest_id;
     private String duration_trip;
     private String id_trip;
@@ -176,13 +176,11 @@ public class TripEditFragment extends Fragment implements GoogleApiClient.OnConn
 
 
         // Get the string array
-        String[] countries = getResources().getStringArray(R.array.countries_array);
+
         String[] trip_type = getResources().getStringArray(R.array.trip_type);
         String[] trip_duration = getResources().getStringArray(R.array.trip_duration);
 
         // Create the adapter and set it to the AutoCompleteTextView
-        ArrayAdapter<String> adapterCountries =
-                new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, countries);
         ArrayAdapter<String> adapterTripType =
                 new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, trip_type);
         ArrayAdapter<String> adapterTripDuration =
@@ -191,10 +189,6 @@ public class TripEditFragment extends Fragment implements GoogleApiClient.OnConn
         //destinationView.setAdapter(adapterCountries);
         spinner_trip_type.setAdapter(adapterTripType);
         spinner_trip_duration.setAdapter(adapterTripDuration);
-
-
-
-
         spinner_trip_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -260,7 +254,12 @@ public class TripEditFragment extends Fragment implements GoogleApiClient.OnConn
         buttonfragment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loadUploadTrip();
+                if (placeId.toString() != " "){
+                    loadUploadTrip();
+                }else {
+                    Toast.makeText(getContext(), R.string.choose_destination, Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -449,7 +448,7 @@ public class TripEditFragment extends Fragment implements GoogleApiClient.OnConn
             switch (status){
                 case "1":
                     Snackbar.make(view, R.string.story_saved, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-                    cleanFields();
+                    //cleanFields();
                     break;
                 case "2": //FAIL
                     //String message2 =  response.getString("message");

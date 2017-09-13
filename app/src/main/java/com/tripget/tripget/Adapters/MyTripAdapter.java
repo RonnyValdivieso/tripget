@@ -3,6 +3,7 @@ package com.tripget.tripget.Adapters;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.tripget.tripget.Activity.MainActivity;
 import com.tripget.tripget.Conexion.Constantes;
 import com.tripget.tripget.Conexion.VolleySingleton;
 import com.tripget.tripget.Fragments.DetailTripFragment;
@@ -43,6 +45,7 @@ public class MyTripAdapter extends RecyclerView.Adapter<MyTripAdapter.MyViewHold
 
     private Context mContext;
     private List<Trip> trips;
+    private View view;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -78,6 +81,7 @@ public class MyTripAdapter extends RecyclerView.Adapter<MyTripAdapter.MyViewHold
 
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.my_trip_cardview, parent,false);
+        view = itemView;
         return new MyTripAdapter.MyViewHolder(itemView);
 
     }
@@ -91,7 +95,7 @@ public class MyTripAdapter extends RecyclerView.Adapter<MyTripAdapter.MyViewHold
         holder.total_budget.setText("$ "+Integer.toString(trip.getBudget()));
         holder.titleTrip.setText(trip.getTitle());
         holder.trip_date.setText(trip.getTrip_date().toString());
-        holder.likes.setText(Integer.toString(trip.getLikes())+ " likes");
+        holder.likes.setText(Integer.toString(trip.getLikes())+ mContext.getString(R.string.likes));
         Glide.with(mContext).load(trip.getPhoto()).apply(RequestOptions.circleCropTransform()).into(holder.user_image);
         Glide.with(mContext).load(trip.getTrip_image()).into(holder.trip_image);
 
@@ -181,16 +185,20 @@ public class MyTripAdapter extends RecyclerView.Adapter<MyTripAdapter.MyViewHold
 
     private void getDeleteResponse(JSONObject response) {
 
+
         try {
             String status = response.getString("status");
             System.out.print(status);
 
             switch (status){
                 case "1":
-                    Toast.makeText(mContext, "Success delete", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(view, R.string.delete, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+
+                    //Toast.makeText(mContext, "Success delete", Toast.LENGTH_SHORT).show();
                     break;
                 case "2": //FAIL
-                    Toast.makeText(mContext,"An error has occur, try again", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext,"An error has occur, try again", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(view, R.string.went_wrong, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                     break;
             }
         }catch (JSONException e){

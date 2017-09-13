@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="trip_duration">
+    <item>Fin de semana</item>
+    <item>1 semana</item>
+    <item>15 días</item>
+    <item>1 mes</item>
+    <item>+3 meses</item>
+</string-array>
+</resources>

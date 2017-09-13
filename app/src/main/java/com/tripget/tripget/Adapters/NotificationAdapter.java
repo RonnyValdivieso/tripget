@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.tripget.tripget.Model.Notification;
 import com.tripget.tripget.R;
 
@@ -53,12 +54,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void onBindViewHolder(NotificationAdapter.MyViewHolder holder, int position) {
 
         Notification notification = notificationList.get(position);
-        holder.userActionNotification.setText(notification.getUsernameNotification() + notification.getUserActionNotification());
-
-        Glide.with(mContext).load(notification.getUserImgNotification()).into(holder.userImgNotification);
-        Glide.with(mContext).load(notification.getTripImgNotification()).into(holder.tripImgNotification);
-
-
+        holder.userActionNotification.setText(notification.getUsername() + " " + mContext.getString(R.string.user_action_noti));
+        Glide.with(mContext).load(notification.getPhoto()).apply(RequestOptions.circleCropTransform()).into(holder.userImgNotification);
+        Glide.with(mContext).load(notification.getTrip_image()).apply(RequestOptions.circleCropTransform()).into(holder.tripImgNotification);
     }
 
     @Override

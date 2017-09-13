@@ -23,6 +23,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -62,6 +63,7 @@ public class MyTripsFragment extends Fragment {
 
     private FloatingActionButton fab;
     private RecyclerView recyclerView;
+    private TextView txtNoTrips;
 
     Activity activity ;
 
@@ -116,6 +118,8 @@ public class MyTripsFragment extends Fragment {
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
+        txtNoTrips = (TextView)view.findViewById(R.id.txtNoTrips);
+
 
         sharedpreferences = this.getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
 
@@ -189,16 +193,18 @@ public class MyTripsFragment extends Fragment {
 
             switch (status){
                 case "1":
+                    recyclerView.setVisibility(View.VISIBLE);
+                    txtNoTrips.setVisibility(View.INVISIBLE);
                     JSONArray tripsJson = response.getJSONArray("trips");
                     System.out.print(tripsJson.toString());
                     Trip[] trips  = gson.fromJson(tripsJson.toString(), Trip[].class);
                     adapter = new MyTripAdapter(activity, Arrays.asList(trips));
                     recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
-
+                    break;
                 case "2": //FAIL
-                    String message2 =  response.getString("message");
-                    Toast.makeText(activity,message2, Toast.LENGTH_SHORT).show();
+                    txtNoTrips.setVisibility(View.VISIBLE);
+                    txtNoTrips.setText("No trips available, write one");
                     break;
             }
         }catch (JSONException e){

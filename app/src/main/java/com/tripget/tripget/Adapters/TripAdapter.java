@@ -57,15 +57,11 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.MyViewHolder> 
     SharedPreferences sharedpreferences;
 
 
-
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView username, total_budget, title, trip_date, likes, likeText;
         public ImageView user_image, trip_image;
         public ImageButton likeBtn;
         public CardView cardView;
-
-
-
 
 
         public MyViewHolder(View view) {
@@ -87,20 +83,6 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.MyViewHolder> 
 
             sharedpreferences = mContext.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
 
-
-            /*likeBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View button) {
-
-                    if (button.isSelected()){
-                        likeBtn.setSelected(false);
-                        likeText.setText("Like");
-                    } else {
-                        likeBtn.setSelected(true);
-                        likeText.setText("Liked");
-                    }
-                }
-            });*/
         }
     }
     public TripAdapter(Context mContext, List<Trip> trips) {
@@ -123,14 +105,15 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.MyViewHolder> 
         holder.total_budget.setText("$ "+Integer.toString(trips.get(position).getBudget()));
         holder.title.setText(trip.getTitle());
         holder.trip_date.setText(trip.getTrip_date().toString());
-        holder.likes.setText(Integer.toString(trip.getLikes())+ " likes");
+        holder.likes.setText(Integer.toString(trip.getLikes())+ mContext.getString(R.string.likes));
         Glide.with(mContext).load(trip.getPhoto()).apply(RequestOptions.circleCropTransform()).into(holder.user_image);
         if (trip.getLiked() == 1){
             holder.likeBtn.setSelected(true);
-            holder.likeText.setText("Liked");
+            holder.likeText.setText(R.string.liked);
+            holder.likeBtn.setEnabled(false);
         }else {
             holder.likeBtn.setSelected(false);
-            holder.likeText.setText("Like");
+            holder.likeText.setText(R.string.like_one);
         }
         Glide.with(mContext).load(trip.getTrip_image()).into(holder.trip_image);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -154,19 +137,19 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.MyViewHolder> 
 
                 if (v.isSelected()){
                     holder.likeBtn.setSelected(false);
-                    holder.likeText.setText("Like");
+                    holder.likeText.setText(R.string.liked);
                 } else {
                     holder.likeBtn.setSelected(true);
-                    holder.likeText.setText("Liked");
+                    holder.likeText.setText(R.string.like_one);
                     String channel = (sharedpreferences.getString("id", ""));
                     loadLike(trip.getId(), channel);
+                    holder.likeBtn.setEnabled(false);
                 }
-                //
             }
         });
     }
 
-    private void loadLike(int id, String channel) {
+    private void loadLike(int id, String channel ) {
 
         HashMap <String,String> tripHash = new LinkedHashMap<>();
         tripHash.put("trip_id", String.valueOf(id));

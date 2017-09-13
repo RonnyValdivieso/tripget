@@ -33,6 +33,18 @@
     <string name="google_key">AIzaSyBP0xuD0U-4wP2mhT9Nm87KUyI0VdhyYrs</string>
     <string name="welcome_tripget">Welcome to Tripget</string>
     <string name="about_us">About us</string>
-    <string name="string_about_us">Tripget es un sistema de recomendación de viajes basados en opiniones de los usuarios. Su principal característica, es que la búsqueda se basa en un presupuesto dado por el usuario, y los resultados son generados de acuerdo a reseñas apegadas a ese criterio</string>
+    <string name="string_about_us">Tripget is a travel recommendation system based on user reviews. Its main characteristic is that the search is based on a budget given by the user, and the results are generated according to reviews adhering to that criterion</string>
     <string name="went_wrong">Something went wrong, try again</string>
+    <string name="search_by">Search by destination, budget or both</string>
+    <string name="search_find">Search your next trip budget</string>
+    <string name="no_trips">No trips available</string>
+    <string name="likes">likes</string>
+    <string name="delete">Sucess delete</string>
+    <string name="liked">Liked</string>
+    <string name="like_one">Like</string>
+    <string name="budget">$Budget</string>
+    <string name="welcome">Welcome to Tripget</string>
+    <string name="choose_destination">First choose destination</string>
+    <string name="user_action_noti">liked your trip</string>
+    <string name="no_notifications">No notifications</string>
 </resources>

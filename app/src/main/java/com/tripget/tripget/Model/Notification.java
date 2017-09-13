@@ -6,74 +6,47 @@ package com.tripget.tripget.Model;
 
 public class Notification {
 
-    private String usernameNotification,userActionNotification, userGIDNotification, tripIdNotification;
-    private int userImgNotification, tripImgNotification;
+    private String username, id;
+    private String photo, trip_image;
 
     public Notification() {
     }
 
-    public Notification(String usernameNotification, String userActionNotification, String userGIDNotification, String tripIdNotification, int userImgNotification, int tripImgNotification) {
-        this.usernameNotification = usernameNotification;
-        this.userActionNotification = userActionNotification;
-        this.userGIDNotification = userGIDNotification;
-        this.tripIdNotification = tripIdNotification;
-        this.userImgNotification = userImgNotification;
-        this.tripImgNotification = tripImgNotification;
+    public Notification(String username, String photo, String trip_image) {
+        this.username = username;
+        this.photo = photo;
+        this.trip_image = trip_image;
     }
 
-    public Notification(String usernameNotification, String userActionNotification, int userImgNotification, int tripImgNotification) {
-        this.usernameNotification = usernameNotification;
-        this.userActionNotification = userActionNotification;
-        this.userImgNotification = userImgNotification;
-        this.tripImgNotification = tripImgNotification;
+    public String getUsername() {
+        return username;
     }
 
-    public String getUsernameNotification() {
-        return usernameNotification;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public void setUsernameNotification(String usernameNotification) {
-        this.usernameNotification = usernameNotification;
+    public String getId() {
+        return id;
     }
 
-    public String getUserActionNotification() {
-        return userActionNotification;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setUserActionNotification(String userActionNotification) {
-        this.userActionNotification = userActionNotification;
+    public String getPhoto() {
+        return photo;
     }
 
-    public String getUserGIDNotification() {
-        return userGIDNotification;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
-    public void setUserGIDNotification(String userGIDNotification) {
-        this.userGIDNotification = userGIDNotification;
+    public String getTrip_image() {
+        return trip_image;
     }
 
-    public String getTripIdNotification() {
-        return tripIdNotification;
+    public void setTrip_image(String trip_image) {
+        this.trip_image = trip_image;
     }
-
-    public void setTripIdNotification(String tripIdNotification) {
-        this.tripIdNotification = tripIdNotification;
-    }
-
-    public int getUserImgNotification() {
-        return userImgNotification;
-    }
-
-    public void setUserImgNotification(int userImgNotification) {
-        this.userImgNotification = userImgNotification;
-    }
-
-    public int getTripImgNotification() {
-        return tripImgNotification;
-    }
-
-    public void setTripImgNotification(int tripImgNotification) {
-        this.tripImgNotification = tripImgNotification;
-    }
-
 }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="trip_type">
+        <item>Solo</item>
+        <item>Pareja</item>
+        <item>Familia</item>
+        <item>Amigos</item>
+    </string-array>
+</resources>
