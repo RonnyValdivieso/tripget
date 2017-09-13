@@ -247,7 +247,9 @@ public class TripEditFragment extends Fragment implements GoogleApiClient.OnConn
 
         buttonphoto.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                openGallery();
+                //openGallery();
+                Glide.with(getActivity()).load(R.drawable.galapagos).into(photo_gallery_pick);
+                photo_gallery_pick.setScaleType(ImageView.ScaleType.CENTER_CROP);
             }
         });
 
